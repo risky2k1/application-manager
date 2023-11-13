@@ -1,0 +1,39 @@
+{
+    "name": "risky2k1/application-manager",
+    "version": "1.0.0",
+    "description": "This is my package application-manager",
+    "keywords": [
+        "risky2k1",
+        "laravel",
+        "application-manager"
+    ],
+    "homepage": "https://github.com/risky2k1/application-manager",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "riskyyy",
+            "email": "theloneranger241@gmail.com",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^8.1",
+        "spatie/laravel-model-states": "^2.4",
+        "yoeunes/toastr": "^2.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "Risky2k1\\ApplicationManager\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Risky2k1\\ApplicationManager\\ApplicationManagerServiceProvider"
+            ],
+            "aliases": {
+                "ApplicationManager": "Risky2k1\\ApplicationManager\\Facades\\ApplicationManager"
+            }
+        }
+    }
+}

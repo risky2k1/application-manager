@@ -1,0 +1,50 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('applications', function (Blueprint $table) {
+            $table->id();
+
+            $table->foreignId('user_id')->comment('Người tạo đơn từ')->constrained('users');
+            $table->foreignId('reviewer_id')->comment('Người duyệt đơn từ')->constrained('users');
+            $table->foreignId('company_id')->constrained('companies');
+
+            $table->string('name')->nullable()->comment('Tên đơn');
+            $table->string('code')->unique();
+            $table->string('state');
+            $table->string('type');
+            $table->string('reason');
+
+            $table->boolean('is_paid_leave')->comment('Có tính công khi nghỉ không')->nullable();
+
+            $table->text('description')->comment('Mô tả thêm về lí do viết đơn')->nullable();
+
+            $table->string('money_amount')->comment('số tiền đơn yêu cầu')->nullable();
+            $table->string('bank_account')->comment('số tài khoản ngân hàng')->nullable();
+
+            $table->string('delivery_time')->nullable()->comment('Thời gian cần hàng');
+            $table->date('delivery_date')->nullable()->comment('Ngày cần hàng');
+
+            $table->text('attached_files')->nullable()->comment('File đính kèm');
+
+            $table->timestamps();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('applications');
+    }
+};
