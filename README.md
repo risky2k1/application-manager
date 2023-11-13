@@ -21,3 +21,8 @@ Run migration:
 ```bash
 php artisan migrate
 ```
+
+Cache Routes:
+```bash
+php artisan route:cache
+```
