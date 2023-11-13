@@ -46,10 +46,15 @@ class Application extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
-//    public function reviewers(): HasMany
-//    {
-//        return $this->hasMany(User::class, 'reviewer_id');
-//    }
+    public function reviewers(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'reviewer_id');
+    }
+
+    public function considers(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'application_consider', 'application_id', 'user_id');
+    }
 
     public function dayOffs(): HasMany
     {
@@ -69,19 +74,18 @@ class Application extends Model
 
     public static function generateCode($companyId): string
     {
-//        $words = explode(" ", $company->name);
-//        $acronym = "";
-//        foreach ($words as $word) {
-//            $acronym .= mb_substr($word, 0, 1);
-//        }
-//        $codesAvailable = Application::pluck('code')->toArray();
-//        do {
-//            $order_code = $acronym.'-'.$vietnameseCompanyOrders ++ .'-'.Carbon::now()->year;
-//        } while (in_array($order_code, $codesAvailable));
-//
-//        return Str::upper($order_code);
+        //        $words = explode(" ", $company->name);
+        //        $acronym = "";
+        //        foreach ($words as $word) {
+        //            $acronym .= mb_substr($word, 0, 1);
+        //        }
+        //        $codesAvailable = Application::pluck('code')->toArray();
+        //        do {
+        //            $order_code = $acronym.'-'.$vietnameseCompanyOrders ++ .'-'.Carbon::now()->year;
+        //        } while (in_array($order_code, $codesAvailable));
+        //
+        //        return Str::upper($order_code);
         $all = Application::all()->count();
         return $all + 1;
     }
-
 }
