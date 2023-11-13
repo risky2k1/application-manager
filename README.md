@@ -16,3 +16,8 @@ php artisan vendor:publish --provider="Risky2k1\ApplicationManager\ApplicationMa
 php artisan vendor:publish --provider="Risky2k1\ApplicationManager\ApplicationManagerServiceProvider" --tag="views"
 php artisan vendor:publish --provider="Risky2k1\ApplicationManager\ApplicationManagerServiceProvider" --tag="config"
 ```
+Run migration:
+
+```bash
+php artisan migrate
+```
