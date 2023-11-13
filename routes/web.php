@@ -14,7 +14,7 @@ use Risky2k1\ApplicationManager\Http\Controllers\ApplicationController;
 |
 */
 
-Route::prefix('/{type}')->middleware('application.type')->group(function () {
+Route::prefix('/{type}')->group(function () {
     Route::get('/', [ApplicationController::class, 'index'])->name('applications.index');
     Route::get('/create', [ApplicationController::class, 'create'])->name('applications.create');
     Route::post('/', [ApplicationController::class, 'store'])->name('applications.store');

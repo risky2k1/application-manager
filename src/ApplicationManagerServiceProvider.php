@@ -46,8 +46,8 @@ class ApplicationManagerServiceProvider extends ServiceProvider
             ], 'views');
 
             //add Middleware
-            $router = $this->app->make(Router::class);
-            $router->aliasMiddleware('application.type', ValidateApplicationTypeMiddleware::class);
+            // $router = $this->app->make(Router::class);
+            // $router->aliasMiddleware('application.type', ValidateApplicationTypeMiddleware::class);
         }
     }
 
@@ -62,7 +62,7 @@ class ApplicationManagerServiceProvider extends ServiceProvider
     {
         return [
             'prefix' => config('application-manager.prefix'),
-            'middleware' => config('application-manager.middleware'),
+            // 'middleware' => config('application-manager.middleware'),
         ];
     }
 }
