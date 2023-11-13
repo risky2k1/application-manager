@@ -18,7 +18,7 @@ class ApplicationManagerServiceProvider extends ServiceProvider
         });
 
         //Add config
-        $this->mergeConfigFrom(__DIR__.'/../config/application-manager.php', 'application-manager');
+        $this->mergeConfigFrom(__DIR__ . '/../config/application-manager.php', 'application-manager');
     }
 
     public function boot()
@@ -29,36 +29,32 @@ class ApplicationManagerServiceProvider extends ServiceProvider
             ]);
 
             $this->publishes([
-                __DIR__.'/../config/application-manager.php' => config_path('application-manager.php'),
+                __DIR__ . '/../config/application-manager.php' => config_path('application-manager.php'),
             ], 'config');
 
             $this->publishes([
-                __DIR__.'/../database/migrations/create_applications_table.php.stub' => database_path('migrations/'.date('Y_m_d_His', time()).'_create_applications_table.php'),
-                __DIR__.'/../database/migrations/create_application_user_table.php.stub' => database_path('migrations/'.date('Y_m_d_His', time()).'_create_application_user_table.php'),
-                __DIR__.'/../database/migrations/create_application_dayoffs_table.php.stub' => database_path('migrations/'.date('Y_m_d_His', time()).'_create_application_dayoffs_table.php'),
+                __DIR__ . '/../database/migrations/create_applications_table.php.stub' => database_path('migrations/' . date('Y_m_d_His', time()) . '_create_applications_tables.php'),
                 // you can add any number of migrations here
             ], 'migrations');
 
-            $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
+            $this->loadRoutesFrom(__DIR__ . '/../routes/web.php');
 
-            $this->loadViewsFrom(__DIR__.'/../resources/views', 'application-manager');
+            $this->loadViewsFrom(__DIR__ . '/../resources/views', 'application-manager');
 
             $this->publishes([
-                __DIR__.'/../resources/views' => resource_path('views/vendor/application-manager'),
+                __DIR__ . '/../resources/views' => resource_path('views/vendor/application-manager'),
             ], 'views');
 
             //add Middleware
             $router = $this->app->make(Router::class);
             $router->aliasMiddleware('application.type', ValidateApplicationTypeMiddleware::class);
-
-
         }
     }
 
     protected function registerRoutes()
     {
         Route::group($this->routeConfiguration(), function () {
-            $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
+            $this->loadRoutesFrom(__DIR__ . '/../routes/web.php');
         });
     }
 
@@ -69,5 +65,4 @@ class ApplicationManagerServiceProvider extends ServiceProvider
             'middleware' => config('application-manager.middleware'),
         ];
     }
-
 }
