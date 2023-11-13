@@ -1,8 +1,17 @@
-# application-manager
+# Application Manager Package
 
-install:
+## Installation
+
+Install the package using Composer:
+
+```bash
 composer require risky2k1/application-manager
 
-publish:
+Publishing Assets
+You can publish the package's assets, such as migrations and views, using the following Artisan commands:
+
+```bash
 php artisan vendor:publish --provider="Risky2k1\ApplicationManager\ApplicationManagerServiceProvider" --tag="migrations"
 php artisan vendor:publish --provider="Risky2k1\ApplicationManager\ApplicationManagerServiceProvider" --tag="views"
+php artisan vendor:publish --provider="Risky2k1\ApplicationManager\ApplicationManagerServiceProvider" --tag="config"
+
