@@ -38,7 +38,7 @@ return [
     'prefix' => 'applications',
 
 
-    'middleware' => ['web', 'auth', '2fa', 'auth.active', 'check.permission', 'application.type'],
+    'middleware' => ['web', 'auth', '2fa', 'auth.active', 'check.permission'],
 
 
 ];

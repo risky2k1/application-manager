@@ -37,7 +37,7 @@ class ApplicationManagerServiceProvider extends ServiceProvider
                 // you can add any number of migrations here
             ], 'migrations');
 
-            $this->loadRoutesFrom(__DIR__ . '/../routes/web.php');
+            $this->registerRoutes();
 
             $this->loadViewsFrom(__DIR__ . '/../resources/views', 'application-manager');
 

@@ -13,12 +13,11 @@ use Risky2k1\ApplicationManager\Http\Controllers\ApplicationController;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-Route::prefix('applications')->group(function () {
-    Route::prefix('/{type}')->middleware('application.type')->group(function () {
-        Route::get('/', [ApplicationController::class, 'index'])->name('applications.index');
-        Route::get('/create', [ApplicationController::class, 'create'])->name('applications.create');
-        Route::post('/', [ApplicationController::class, 'store'])->name('applications.store');
-    });
-    Route::get('/{application}/edit', [ApplicationController::class, 'edit'])->name('applications.edit');
-    Route::patch('/{application}', [ApplicationController::class, 'update'])->name('applications.update');
+
+Route::prefix('/{type}')->middleware('application.type')->group(function () {
+    Route::get('/', [ApplicationController::class, 'index'])->name('applications.index');
+    Route::get('/create', [ApplicationController::class, 'create'])->name('applications.create');
+    Route::post('/', [ApplicationController::class, 'store'])->name('applications.store');
 });
+Route::get('/{application}/edit', [ApplicationController::class, 'edit'])->name('applications.edit');
+Route::patch('/{application}', [ApplicationController::class, 'update'])->name('applications.update');
