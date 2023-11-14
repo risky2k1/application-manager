@@ -106,7 +106,7 @@
                                 <td>{{$application->code}}</td>
                                 <td>
                                     <label class="{{$application->state->class()}} application-state-label"
-                                         @if($application->isPending)data-bs-toggle="modal" data-bs-target="#state_modal" data-id="{{$application->id}}"@endif
+                                         @if($application->isPending)data-bs-toggle="modal" data-bs-target="#state_modal" data-id="{{$application->id}}" data-url="{{route('applications.update.state',$application)}}"@endif
                                     >{{$application->state->text()}}</label></td>
                                 <td>{{$application->reason}}</td>
                                 <td>{{$application->user->roles->first()?->text}}</td>

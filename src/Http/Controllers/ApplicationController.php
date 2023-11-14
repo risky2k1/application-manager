@@ -4,6 +4,8 @@ namespace Risky2k1\ApplicationManager\Http\Controllers;
 
 use Risky2k1\ApplicationManager\Models\Application;
 use Risky2k1\ApplicationManager\Models\States\Application\Pending;
+use Risky2k1\ApplicationManager\Models\States\Application\Approved;
+use Risky2k1\ApplicationManager\Models\States\Application\Declined;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;

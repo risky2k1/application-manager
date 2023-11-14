@@ -4,6 +4,7 @@ namespace Risky2k1\ApplicationManager\Models;
 
 use App\Models\User;
 use Risky2k1\ApplicationManager\Models\States\Application\ApplicationState;
+use Risky2k1\ApplicationManager\Models\States\Application\Pending;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
