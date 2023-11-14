@@ -10,12 +10,13 @@ class ApplicationDayOff extends Model
 {
     use HasFactory;
 
+    protected $table = 'application_dayoffs';
+
     protected $fillable = [
         'end_shift',
         'end_time',
         'start_shift',
         'start_time',
-        'application_id',
         'application_id',
     ];
 
