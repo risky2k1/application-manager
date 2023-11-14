@@ -3,7 +3,7 @@
 namespace Risky2k1\ApplicationManager\Http\Controllers;
 
 use Risky2k1\ApplicationManager\Models\Application;
-use App\Models\States\Application\Pending;
+use Risky2k1\ApplicationManager\Models\States\Application\Pending;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -18,13 +18,13 @@ class ApplicationController extends Controller
 
         $applications = $query->where('type', $type)->latest()->paginate()->withQueryString();
 
-        return view('application-manager::applications.index', compact('applications'));
+        return view('pages.applications.index', compact('applications'));
     }
 
     public function create()
     {
         $users = User::all();
-        return view('application-manager::applications.create', compact('users'));
+        return view('pages.applications.create', compact('users'));
     }
 
     public function store(Request $request)
@@ -66,7 +66,7 @@ class ApplicationController extends Controller
         if ($request->hasFile('attached_files')) {
             $file = $request->file('attached_files');
             $application->update([
-                'attached_files' => Storage::disk('public')->putFileAs('application_attached_files/'.$application->user_id.'/'.$application->id, $file, $file->getClientOriginalName()),
+                'attached_files' => Storage::disk('public')->putFileAs('application_attached_files/' . $application->user_id . '/' . $application->id, $file, $file->getClientOriginalName()),
             ]);
         }
         if ($request->has('row_repeater')) {
@@ -89,14 +89,13 @@ class ApplicationController extends Controller
         toastr()->success('Đơn của bạn đã được tạo thành công');
 
         return redirect()->route('applications.index', ['type' => $request->route('type')]);
-
     }
 
     public function edit(Request $request, Application $application)
     {
         $users = User::all();
         $type = $application->type;
-        return view('application-manager::applications.edit', compact('application', 'type', 'users'));
+        return view('pages.applications.edit', compact('application', 'type', 'users'));
     }
 
     public function update(Request $request, Application $application)
@@ -134,7 +133,7 @@ class ApplicationController extends Controller
         if ($request->hasFile('attached_files')) {
             $file = $request->file('attached_files');
             $application->update([
-                'attached_files' => Storage::disk('public')->putFileAs('application_attached_files/'.$application->user_id.'/'.$application->id, $file, $file->getClientOriginalName()),
+                'attached_files' => Storage::disk('public')->putFileAs('application_attached_files/' . $application->user_id . '/' . $application->id, $file, $file->getClientOriginalName()),
             ]);
         }
         if ($request->has('row_repeater')) {

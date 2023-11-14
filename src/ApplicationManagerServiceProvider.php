@@ -42,7 +42,7 @@ class ApplicationManagerServiceProvider extends ServiceProvider
             $this->loadViewsFrom(__DIR__ . '/../resources/views', 'application-manager');
 
             $this->publishes([
-                __DIR__ . '/../resources/views' => resource_path('views/vendor/application-manager'),
+                __DIR__ . '/../resources/views' => resource_path('views/pages'),
             ], 'views');
 
             //add Middleware
@@ -62,7 +62,7 @@ class ApplicationManagerServiceProvider extends ServiceProvider
     {
         return [
             'prefix' => config('application-manager.prefix'),
-            // 'middleware' => config('application-manager.middleware'),
+            'middleware' => config('application-manager.middleware'),
         ];
     }
 }
