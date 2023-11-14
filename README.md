@@ -23,6 +23,7 @@ php artisan migrate
 ```
 
 ### Cache Routes:
+(Optional) If you get errors about routes missing, you can try:
 ```bash
 php artisan route:cache
 ```
