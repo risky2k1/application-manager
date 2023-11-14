@@ -64,13 +64,16 @@ class Application extends Model
         return $this->hasMany(ApplicationDayOff::class, 'application_id');
     }
 
-    protected function timeOff(): Attribute
+    protected function numberOfDayOff(): Attribute
     {
         return Attribute::make(
             get: function () {
-                $startDate = Carbon::parse($this->start_date);
-                $endDate = Carbon::parse($this->end_date);
-                return $startDate->diffInDays($endDate);
+                return $this->dayOffs->sum(function ($dayOff) {
+                    $start = new \DateTime($dayOff->start_time);
+                    $end = new \DateTime($dayOff->end_time);
+
+                    return $start->diff($end)->days + 1;
+                });
             }
         );
     }

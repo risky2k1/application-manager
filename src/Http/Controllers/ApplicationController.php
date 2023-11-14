@@ -26,6 +26,10 @@ class ApplicationController extends Controller
             });
         }
 
+        if (!empty($request->input('state'))) {
+            $query->where('state', $request->input('state'));
+        }
+
         $applications = $query->where('type', $type)->latest()->paginate()->withQueryString();
 
         return view('pages.applications.index', compact('applications'));

@@ -44,6 +44,23 @@
             <!--begin::Card title-->
             <form class="card-title" action="" method="get" id="form_filter">
                 <div class="row w-700px">
+                    <div class="col-md-4"> <!-- First column for select -->
+                        <div class="input-group">
+                            <select
+                                    class="form-select application-state-filter"
+                                    id="state"
+                                    name="state"
+                                    data-tags="false"
+                                    data-control="select2"
+                                    data-placeholder="Trạng thái"
+                            >
+                                <option value="null">Tất cả</option>
+                                <option value="pending" @selected(request()->input('state') == 'pending')>Chờ duyệt</option>
+                                <option value="approved" @selected(request()->input('state') == 'approved')>Đã duyệt</option>
+                                <option value="declined" @selected(request()->input('state') == 'declined')>Không duyệt</option>
+                            </select>
+                        </div>
+                    </div>
                     <div class="col-md-8"> <!-- Second column for input and button -->
                         <div class="input-group d-flex justify-content-end">
                             <input type="text" name="keyword" placeholder="Nhập từ khóa" class="form-control "
@@ -70,68 +87,77 @@
         </div>
         <!--end::Card header-->
         <!--begin::Card body-->
-        <div class="card-body pt-0">
-            <!--begin::Table-->
-            <div id="kt_customers_table_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
-                <div class="table-responsive">
-                    <table class="table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer" id="kt_customers_table">
-                        <!--begin::Table head-->
-                        <thead>
-                        <!--begin::Table row-->
-                        <tr class="text-center fw-bold fs-7 text-uppercase gs-0">
-                            <th class="text-start">STT</th>
-                            <th>Người tạo</th>
-                            <th>Mã đơn</th>
-                            <th>Trạng thái</th>
-                            <th>Lý do</th>
-                            <th>Phòng ban</th>
-                            <th>Tệp đính kèm</th>
-                            <th>Số ngày</th>
-                            <th>Ngày tạo</th>
-                            <th class="text-end sorting_disabled" rowspan="1" colspan="1" aria-label="Actions">Hành động</th>
-                        </tr>
-                        <!--end::Table row-->
-                        </thead>
-                        <!--end::Table head-->
-                        <!--begin::Table body-->
-                        <tbody class="text-center fw-semibold text-gray-600">
-                        @foreach($applications as $application)
-                            <tr class="odd text-gray-800">
-                                <td>
-                                    <a href="#">{{$loop->increment}}</a>
-                                </td>
-                                <td>
-                                    <a href="{{route('users.show',$application->user)}}" class="text-gray-800 text-hover-primary mb-1">{{$application->user->name}}</a>
-                                </td>
-                                <td>{{$application->code}}</td>
-                                <td>
-                                    <label class="{{$application->state->class()}} application-state-label"
-                                         @if($application->isPending)data-bs-toggle="modal" data-bs-target="#state_modal" data-id="{{$application->id}}" data-url="{{route('applications.update.state',$application)}}"@endif
-                                    >{{$application->state->text()}}</label></td>
-                                <td>{{$application->reason}}</td>
-                                <td>{{$application->user->roles->first()?->text}}</td>
-                                <td>
-                                    <a href="{{asset('storage/'.$application->attached_files)}}"><i class="fa-solid fa-file"></i></a>
-                                </td>
-                                <td>{{$application->timeOff}}</td>
-                                <td>{{$application->created_at}}</td>
-                                <td class="d-flex align-items-center justify-content-end">
-                                    <a href="{{route('applications.edit',$application)}}" class="col-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" aria-label="Sửa"
-                                       data-bs-original-title="Sửa" data-kt-initialized="1"><i class="fa-solid fa-pen p-2"></i></a>
-                                    <button type="button" class="border border-white delete_button" data-delete="Đơn từ">
-                                        <i class="fa-solid fa-trash"></i>
-                                    </button>
-                                </td>
+        @if($applications->count() > 0)
+            <div class="card-body pt-0">
+                <!--begin::Table-->
+                <div id="kt_customers_table_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
+                    <div class="table-responsive">
+                        <table class="table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer" id="kt_customers_table">
+                            <!--begin::Table head-->
+                            <thead>
+                            <!--begin::Table row-->
+                            <tr class="text-center fw-bold fs-7 text-uppercase gs-0">
+                                <th class="text-start">STT</th>
+                                <th>Người tạo</th>
+                                <th>Mã đơn</th>
+                                <th>Trạng thái</th>
+                                <th>Lý do</th>
+                                <th>Phòng ban</th>
+                                <th>Tệp đính kèm</th>
+                                <th>Số ngày</th>
+                                <th>Ngày tạo</th>
+                                <th class="text-end sorting_disabled" rowspan="1" colspan="1" aria-label="Actions">Hành động</th>
                             </tr>
-                        @endforeach
-                        </tbody>
-                        <!--end::Table body-->
-                    </table>
-                    {{$applications->links()}}
+                            <!--end::Table row-->
+                            </thead>
+                            <!--end::Table head-->
+                            <!--begin::Table body-->
+                            <tbody class="text-center fw-semibold text-gray-600">
+                            @foreach($applications as $application)
+                                <tr class="odd text-gray-800">
+                                    <td>
+                                        <a href="#">{{$loop->increment}}</a>
+                                    </td>
+                                    <td>
+                                        <a href="{{route('users.show',$application->user)}}" class="text-gray-800 text-hover-primary mb-1">{{$application->user->name}}</a>
+                                    </td>
+                                    <td>{{$application->code}}</td>
+                                    <td>
+                                        <label class="{{$application->state->class()}} application-state-label"
+                                               @if($application->isPending)data-bs-toggle="modal" data-bs-target="#state_modal" data-id="{{$application->id}}"
+                                               data-url="{{route('applications.update.state',$application)}}"@endif
+                                        >{{$application->state->text()}}</label></td>
+                                    <td>{{$application->reason}}</td>
+                                    <td>{{$application->user->roles->first()?->text}}</td>
+                                    <td>
+                                        <a href="{{asset('storage/'.$application->attached_files)}}"><i class="fa-solid fa-file"></i></a>
+                                    </td>
+                                    <td>{{$$application->number_of_day_off}}</td>
+                                    <td>{{carbon($application->created_at,'Y-m-d','d-m-Y')}}</td>
+                                    <td class="d-flex align-items-center justify-content-end">
+                                        <a href="{{route('applications.edit',$application)}}" class="col-auto me-5" data-bs-toggle="tooltip" data-bs-placement="bottom" aria-label="Sửa"
+                                           data-bs-original-title="Sửa" data-kt-initialized="1"><i class="fa-solid fa-pen p-2"></i></a>
+                                        <button type="button" class="border border-white delete_button" data-delete="Đơn từ">
+                                            <i class="fa-solid fa-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            @endforeach
+                            </tbody>
+                            <!--end::Table body-->
+                        </table>
+                        {{$applications->links()}}
+                    </div>
                 </div>
+                <!--end::Table-->
             </div>
-            <!--end::Table-->
-        </div>
+        @else
+            @if(check_url_parameters(request()))
+                <h3 class="mt-5 text-center text-danger">Không tìm thấy Đơn từ nào</h3>
+            @else
+                <h3 class="mt-5 text-center text-danger">Chưa có Đơn từ nào.</h3>
+            @endif
+        @endif
         <!--end::Card body-->
     </div>
     <div class="modal fade" tabindex="-1" id="state_modal">

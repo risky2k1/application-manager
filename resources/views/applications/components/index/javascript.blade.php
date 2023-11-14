@@ -6,6 +6,9 @@
             $('.input-application-id').val(applicationId)
             $('.update-state-form').attr('action', applicationUpdateStateUrl);
         })
+        $(document).on('change', '.application-state-filter', function () {
+            $('#form_filter').submit();
+        })
     })
     const updateApplicationState = (state) => {
         $('.input-application-state').val(state)
