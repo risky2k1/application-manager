@@ -2,7 +2,8 @@
 
 namespace Risky2k1\ApplicationManager\Models;
 
-use App\Models\States\Application\ApplicationState;
+use App\Models\User;
+use Risky2k1\ApplicationManager\Models\States\Application\ApplicationState;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -58,7 +59,7 @@ class Application extends Model
 
     public function dayOffs(): HasMany
     {
-        return $this->hasMany(ApplicationDayoff::class, 'application_id');
+        return $this->hasMany(ApplicationDayOff::class, 'application_id');
     }
 
     protected function timeOff(): Attribute
