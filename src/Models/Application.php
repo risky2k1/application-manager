@@ -90,4 +90,13 @@ class Application extends Model
         $all = Application::all()->count();
         return $all + 1;
     }
+
+    protected function isPending(): Attribute
+    {
+        return Attribute::make(
+            get: function () {
+                return $this->state == Pending::$name;
+            }
+        );
+    }
 }

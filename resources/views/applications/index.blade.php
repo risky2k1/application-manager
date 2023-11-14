@@ -104,7 +104,10 @@
                                     <a href="{{route('users.show',$application->user)}}" class="text-gray-800 text-hover-primary mb-1">{{$application->user->name}}</a>
                                 </td>
                                 <td>{{$application->code}}</td>
-                                <td><label class="{{$application->state->class()}}">{{$application->state->text()}}</label></td>
+                                <td>
+                                    <label class="{{$application->state->class()}} application-state-label"
+                                         @if($application->isPending)data-bs-toggle="modal" data-bs-target="#state_modal" data-id="{{$application->id}}"@endif
+                                    >{{$application->state->text()}}</label></td>
                                 <td>{{$application->reason}}</td>
                                 <td>{{$application->user->roles->first()?->text}}</td>
                                 <td>
@@ -131,4 +134,38 @@
         </div>
         <!--end::Card body-->
     </div>
+    <div class="modal fade" tabindex="-1" id="state_modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">Duyệt đơn từ</h3>
+
+                    <!--begin::Close-->
+                    <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
+                        <i class="ki-duotone ki-cross fs-1"><span class="path1"></span><span class="path2"></span></i>
+                    </div>
+                    <!--end::Close-->
+                </div>
+
+                <div class="modal-body">
+                    <p>Duyệt đơn từ đã chọn?</p>
+                </div>
+
+                <div class="modal-footer">
+                    <form method="post" action="{{route('applications.update.state',$application)}}" class="update-state-form">
+                        @csrf
+                        @method('PATCH')
+                        <input type="text" name="state" hidden class="input-application-state">
+                        <input type="text" name="application_id" hidden class="input-application-id">
+                        <button type="button" class="btn btn-sm btn-danger" onclick="updateApplicationState('declined')">Không duyệt</button>
+                        <button type="button" class="btn btn-sm btn-primary" onclick="updateApplicationState('approved')">Duyệt</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+@endsection
+@section('javascript')
+    @include('pages.applications.components.index.javascript')
 @endsection

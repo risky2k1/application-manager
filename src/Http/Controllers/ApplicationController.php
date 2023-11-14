@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use Spatie\ModelStates\Exceptions\CouldNotPerformTransition;
 
 class ApplicationController extends Controller
 {
@@ -176,6 +177,26 @@ class ApplicationController extends Controller
         }
         toastr()->success('Cập nhật đơn từ thành công');
 
+        return redirect()->route('applications.index', ['type' => $application->type]);
+    }
+
+    public function updateApplicationState(Request $request)
+    {
+        $application = Application::findOrFail($request->application_id);
+        if (!empty($request->state) && $application->isPending) {
+            try {
+                switch ($request->state) {
+                    case ('declined'):
+                        $application->state->transitionTo(Declined::class);
+                        break;
+                    default:
+                        $application->state->transitionTo(Approved::class);
+                }
+                toastr()->success('Cập nhật trạng thái đơn từ thành công');
+            } catch (CouldNotPerformTransition $exception) {
+                toastr()->error($exception->getMessage());
+            }
+        }
         return redirect()->route('applications.index', ['type' => $application->type]);
     }
 }

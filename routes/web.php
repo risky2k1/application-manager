@@ -21,3 +21,4 @@ Route::prefix('/{type}')->group(function () {
 });
 Route::get('/{application}/edit', [ApplicationController::class, 'edit'])->name('applications.edit');
 Route::patch('/{application}', [ApplicationController::class, 'update'])->name('applications.update');
+Route::patch('/{application}/update-state', [ApplicationController::class, 'updateApplicationState'])->name('applications.update.state');

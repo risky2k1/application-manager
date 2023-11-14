@@ -17,6 +17,7 @@ abstract class ApplicationState extends State
     {
         return parent::config()
             ->default(Pending::class)
-            ->allowTransition(Pending::class, Approved::class);
+            ->allowTransition(Pending::class, Approved::class)
+            ->allowTransition(Pending::class, Declined::class);
     }
 }
