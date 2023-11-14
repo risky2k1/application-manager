@@ -16,6 +16,13 @@ class ApplicationController extends Controller
     {
         $query = Application::query();
 
+        if (!empty($request->input('keyword'))) {
+            $keyword = $request->input('keyword');
+            $query->whereHas('user', function ($userQuery) use ($keyword) {
+                $userQuery->where('name', 'like', '%'.$keyword.'%');
+            });
+        }
+
         $applications = $query->where('type', $type)->latest()->paginate()->withQueryString();
 
         return view('pages.applications.index', compact('applications'));
