@@ -104,7 +104,7 @@
                                     <a href="#" class="text-gray-800 text-hover-primary mb-1">{{$application->user->name}}</a>
                                 </td>
                                 <td>{{$application->code}}</td>
-                                <td>{{$application->state}}</td>
+                                <td><label class="{{$application->state->class()}}">{{$application->state->text()}}</label></td>
                                 <td>{{$application->reason}}</td>
                                 <td>{{$application->user->role}}</td>
                                 <td>

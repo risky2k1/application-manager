@@ -9,7 +9,8 @@
                 data-allow-clear="true"
                 data-hide-search="true"
                 name="reason"
-                id="reason">
+                id="reason"
+                required>
             <option value="">-- --</option>
             @foreach(config('application-manager.application.type.leave_application') as $reason)
                 <option value="{{$reason}}">{{$reason}}</option>
@@ -21,7 +22,7 @@
     <div class="col-sm-6">
         <!--begin::Input group-->
         <!--begin::Label-->
-        <label class="required fw-semibold fs-6 mb-2" for="is_paid_leave">Tính công</label>
+        <label class="fw-semibold fs-6 mb-2" for="is_paid_leave">Tính công</label>
         <!--end::Label-->
         <!--begin::Input-->
         <select class="form-select @error('is_paid_leave') is-invalid @enderror"
@@ -178,7 +179,8 @@
         <label class="required fw-semibold fs-6 mb-2" for="description">Mô tả</label>
         <!--end::Label-->
         <!--begin::Input-->
-        <textarea name="description" id="description" cols="30" rows="10" class="form-control mb-3 mb-lg-0 @error('phone') is-invalid @enderror" required></textarea>
+        <textarea name="description" id="description" cols="30" rows="10"
+                  class="form-control mb-3 mb-lg-0 @error('phone') is-invalid @enderror" required></textarea>
         <!--end::Input-->
         <div class="fv-plugins-message-container invalid-feedback">@error('description') {{$message}} @enderror</div>
         <!--end::Input group-->
@@ -191,17 +193,18 @@
         <label class="fw-semibold fs-6 mb-2" for="attached_files">Tệp đính kèm</label>
         <!--end::Label-->
         <!--begin::Input-->
-        <input type="file" name="attached_files" id="attached_files" class="form-control mb-3 mb-lg-0 @error('attached_files') is-invalid @enderror">
+        <input type="file" name="attached_files" id="attached_files"
+               class="form-control mb-3 mb-lg-0 @error('attached_files') is-invalid @enderror">
         <!--end::Input-->
         <div class="fv-plugins-message-container invalid-feedback">@error('attached_files') {{$message}} @enderror</div>
         <!--end::Input group-->
     </div>
 </div>
 <div class="row">
-    <div class="col-sm-12">
+    <div class="col-sm-6">
         <!--begin::Input group-->
         <!--begin::Label-->
-        <label class="fw-semibold fs-6 mb-2" for="reviewer_id">Người kiểm duyệt</label>
+        <label class="fw-semibold fs-6 mb-2" for="reviewer_id"><span class="required">Người kiểm duyệt</span></label>
         <!--end::Label-->
         <!--begin::Input-->
         <select class="form-select @error('reviewer_id') is-invalid @enderror"
@@ -210,7 +213,8 @@
                 data-allow-clear="true"
                 data-hide-search="true"
                 name="reviewer_id"
-                id="reviewer_id">
+                id="reviewer_id"
+                required>
             <option value="">-- --</option>
             @foreach($users as $reviewer)
                 <option value="{{$reviewer->id}}">{{$reviewer->name}}</option>
@@ -218,6 +222,29 @@
         </select>
         <!--end::Input-->
         <div class="fv-plugins-message-container invalid-feedback">@error('reviewer_id') {{$message}} @enderror</div>
+        <!--end::Input group-->
+    </div>
+    <div class="col-sm-6">
+        <!--begin::Input group-->
+        <!--begin::Label-->
+        <label class="fw-semibold fs-6 mb-2" for="consider_id"><span class="required">Người theo dõi</span></label>
+        <!--end::Label-->
+        <!--begin::Input-->
+        <select class="form-select @error('consider_id') is-invalid @enderror"
+                data-control="select2"
+                data-placeholder="Người theo dõi"
+                data-allow-clear="true"
+                data-hide-search="true"
+                name="consider_id[]"
+                id="consider_id"
+                required>
+            <option value="">-- --</option>
+            @foreach($users as $consider)
+                <option value="{{$consider->id}}">{{$consider->name}}</option>
+            @endforeach
+        </select>
+        <!--end::Input-->
+        <div class="fv-plugins-message-container invalid-feedback">@error('consider_id') {{$message}} @enderror</div>
         <!--end::Input group-->
     </div>
 </div>

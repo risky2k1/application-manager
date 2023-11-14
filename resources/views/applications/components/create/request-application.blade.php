@@ -5,11 +5,12 @@
         </label>
         <select class="form-select @error('reason') is-invalid @enderror"
                 data-control="select2"
-                data-placeholder="Chọn Lý do"
+                data-placeholder="Loại đề xuất"
                 data-allow-clear="true"
                 data-hide-search="true"
                 name="reason"
-                id="reason">
+                id="reason"
+                required>
             <option value="">-- --</option>
             @foreach(config('application-manager.application.type.request_application') as $reason)
                 <option value="{{$reason}}">{{$reason}}</option>
@@ -27,9 +28,10 @@
         <input type="text"
                class="form-control mb-3 mb-lg-0 @error('name') is-invalid @enderror"
                name="name"
-               placeholder="Thời gian bắt đầu"
+               placeholder="Tên đề xuất"
                autocomplete="off"
                id="name"
+               required
         />
         <!--end::Input-->
         <div class="fv-plugins-message-container invalid-feedback">@error('name') {{$message}} @enderror</div>
@@ -45,11 +47,11 @@
         <!--begin::Input-->
         <select class="form-select @error('user_id') is-invalid @enderror"
                 data-control="select2"
-                data-placeholder="Chọn Lý do"
+                data-placeholder="Người đề nghị"
                 data-allow-clear="true"
                 data-hide-search="true"
                 name="user_id"
-                id="user_id">
+                id="user_id" required>
             <option value="">-- --</option>
             @foreach($users as $user)
                 <option value="{{$user->id}}">{{$user->name}}</option>
@@ -62,7 +64,7 @@
     <div class="col-sm-6">
         <!--begin::Input group-->
         <!--begin::Label-->
-        <label class="required fw-semibold fs-6 mb-2" for="money_amount">Số tiền</label>
+        <label class="fw-semibold fs-6 mb-2" for="money_amount">Số tiền</label>
         <!--end::Label-->
         <!--begin::Input-->
         <input type="text"
@@ -80,11 +82,12 @@
     <div class="col-sm-12">
         <!--begin::Input group-->
         <!--begin::Label-->
-        <label class="required fw-semibold fs-6 mb-2" for="bank_account">Thông tin tài khoản</label>
+        <label class="fw-semibold fs-6 mb-2" for="bank_account">Thông tin tài khoản</label>
         <!--end::Label-->
         <!--begin::Input-->
-        <textarea name="bank_account" id="bank_account" cols="30" rows="10" class="form-control mb-3 mb-lg-0 @error('bank_account') is-invalid @enderror"
-                  placeholder="Số tài khoản - Ngân hàng (chi nhánh) - Chủ tài khoản (nếu người nhận tiền khác người đề xuất)" required></textarea>
+        <textarea name="bank_account" id="bank_account" cols="30" rows="10"
+                  class="form-control mb-3 mb-lg-0 @error('bank_account') is-invalid @enderror"
+                  placeholder="Số tài khoản - Ngân hàng (chi nhánh) - Chủ tài khoản (nếu người nhận tiền khác người đề xuất)"></textarea>
         <!--end::Input-->
         <div class="fv-plugins-message-container invalid-feedback">@error('bank_account') {{$message}} @enderror</div>
         <!--end::Input group-->
@@ -94,16 +97,17 @@
     <div class="col-sm-6">
         <!--begin::Input group-->
         <!--begin::Label-->
-        <label class="fw-semibold fs-6 mb-2" for="delivery_time">Thời gian cần hàng</label>
+        <label class="required fw-semibold fs-6 mb-2" for="delivery_time">Thời gian cần hàng</label>
         <!--end::Label-->
         <!--begin::Input-->
         <select class="form-select @error('delivery_time') is-invalid @enderror"
                 data-control="select2"
-                data-placeholder="Chọn Lý do"
+                data-placeholder="Thời gian cần hàng"
                 data-allow-clear="true"
                 data-hide-search="true"
                 name="delivery_time"
-                id="delivery_time">
+                id="delivery_time"
+                required>
             <option value="">-- --</option>
             @foreach(config('application-manager.application.shift') as $shift)
                 <option value="{{$shift}}">{{$shift}}</option>
@@ -116,10 +120,12 @@
     <div class="col-sm-6">
         <!--begin::Input group-->
         <!--begin::Label-->
-        <label class="fw-semibold fs-6 mb-2" for="delivery_date">Ngày cần hàng</label>
+        <label class="required fw-semibold fs-6 mb-2" for="delivery_date">Ngày cần hàng</label>
         <!--end::Label-->
         <!--begin::Input-->
-        <input type="text" name="delivery_date" id="delivery_date" class="form-control date-picker mb-3 mb-lg-0 @error('delivery_date') is-invalid @enderror" aria-autocomplete="none">
+        <input type="text" name="delivery_date" id="delivery_date"
+               class="form-control date-picker mb-3 mb-lg-0 @error('delivery_date') is-invalid @enderror"
+               aria-autocomplete="none" autocomplete="off" required>
         <!--end::Input-->
         <div class="fv-plugins-message-container invalid-feedback">@error('delivery_date') {{$message}} @enderror</div>
         <!--end::Input group-->
@@ -132,17 +138,18 @@
         <label class="fw-semibold fs-6 mb-2" for="attached_files">Tệp đính kèm</label>
         <!--end::Label-->
         <!--begin::Input-->
-        <input type="file" name="attached_files" id="attached_files" class="form-control mb-3 mb-lg-0 @error('attached_files') is-invalid @enderror">
+        <input type="file" name="attached_files" id="attached_files"
+               class="form-control mb-3 mb-lg-0 @error('attached_files') is-invalid @enderror">
         <!--end::Input-->
         <div class="fv-plugins-message-container invalid-feedback">@error('attached_files') {{$message}} @enderror</div>
         <!--end::Input group-->
     </div>
 </div>
 <div class="row">
-    <div class="col-sm-12">
+    <div class="col-sm-6">
         <!--begin::Input group-->
         <!--begin::Label-->
-        <label class="fw-semibold fs-6 mb-2" for="reviewer_id">Người kiểm duyệt</label>
+        <label class="required fw-semibold fs-6 mb-2" for="reviewer_id">Người kiểm duyệt</label>
         <!--end::Label-->
         <!--begin::Input-->
         <select class="form-select @error('reviewer_id') is-invalid @enderror"
@@ -151,7 +158,7 @@
                 data-allow-clear="true"
                 data-hide-search="true"
                 name="reviewer_id"
-                id="reviewer_id">
+                id="reviewer_id" required>
             <option value="">-- --</option>
             @foreach($users as $reviewer)
                 <option value="{{$reviewer->id}}">{{$reviewer->name}}</option>
@@ -159,6 +166,28 @@
         </select>
         <!--end::Input-->
         <div class="fv-plugins-message-container invalid-feedback">@error('reviewer_id') {{$message}} @enderror</div>
+        <!--end::Input group-->
+    </div>
+    <div class="col-sm-6">
+        <!--begin::Input group-->
+        <!--begin::Label-->
+        <label class="required fw-semibold fs-6 mb-2" for="consider_id">Người theo dõi</label>
+        <!--end::Label-->
+        <!--begin::Input-->
+        <select class="form-select @error('consider_id') is-invalid @enderror"
+                data-control="select2"
+                data-placeholder="Người theo dõi"
+                data-allow-clear="true"
+                data-hide-search="true"
+                name="consider_id[]"
+                id="consider_id" required>
+            <option value="">-- --</option>
+            @foreach($users as $consider)
+                <option value="{{$consider->id}}">{{$consider->name}}</option>
+            @endforeach
+        </select>
+        <!--end::Input-->
+        <div class="fv-plugins-message-container invalid-feedback">@error('consider_id') {{$message}} @enderror</div>
         <!--end::Input group-->
     </div>
 </div>

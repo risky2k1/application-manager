@@ -163,4 +163,26 @@
         <div class="fv-plugins-message-container invalid-feedback">@error('reviewer_id') {{$message}} @enderror</div>
         <!--end::Input group-->
     </div>
+    <div class="col-sm-6">
+        <!--begin::Input group-->
+        <!--begin::Label-->
+        <label class="fw-semibold fs-6 mb-2" for="consider_id">Người theo dõi</label>
+        <!--end::Label-->
+        <!--begin::Input-->
+        <select class="form-select @error('consider_id') is-invalid @enderror"
+                data-control="select2"
+                data-placeholder="Người theo dõi"
+                data-allow-clear="true"
+                data-hide-search="true"
+                name="consider_id[]"
+                id="consider_id">
+            <option value="">-- --</option>
+            @foreach($users as $consider)
+                <option value="{{$consider->id}}" @selected($consider->id == $application->considers->user_id)>{{$consider->name}}</option>
+            @endforeach
+        </select>
+        <!--end::Input-->
+        <div class="fv-plugins-message-container invalid-feedback">@error('consider_id') {{$message}} @enderror</div>
+        <!--end::Input group-->
+    </div>
 </div>

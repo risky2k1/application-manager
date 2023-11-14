@@ -92,6 +92,12 @@ class ApplicationController extends Controller
                 ]);
             }
         }
+        if (!empty($request->consider_id)) {
+            foreach ($request->consider_id as $considerId) {
+                $consider = User::findOrFail($considerId);
+                $application->considers()->toggle($consider);
+            }
+        }
 
         toastr()->success('Đơn của bạn đã được tạo thành công');
 
