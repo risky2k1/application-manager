@@ -42,6 +42,9 @@ php artisan route:cache
 ```
 ![image](https://github.com/risky2k1/application-manager/assets/97021417/1bc1a8cf-d6ac-4ab9-8967-f44390303a8d)
 
+## Usage
+After done the installation:
+![image](https://github.com/risky2k1/application-manager/assets/97021417/1440a734-642e-49ce-8b24-c2a702b886db)
 
 
 
