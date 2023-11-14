@@ -141,7 +141,7 @@
     </div>
 </div>
 <div class="row">
-    <div class="col-sm-12">
+    <div class="col-sm-6">
         <!--begin::Input group-->
         <!--begin::Label-->
         <label class="fw-semibold fs-6 mb-2" for="reviewer_id">Người kiểm duyệt</label>
@@ -178,7 +178,7 @@
                 id="consider_id">
             <option value="">-- --</option>
             @foreach($users as $consider)
-                <option value="{{$consider->id}}" @selected($consider->id == $application->considers->user_id)>{{$consider->name}}</option>
+                <option value="{{$consider->id}}" @selected(in_array($consider->id, $application->considers->pluck('id')->toArray()))>{{$consider->name}}</option>
             @endforeach
         </select>
         <!--end::Input-->

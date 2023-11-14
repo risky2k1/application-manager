@@ -117,6 +117,7 @@
                         <td class="col-1">
                             <div data-repeater-delete class="delete"><i class="fa-solid fa-trash"></i></div>
                         </td>
+                        <input type="hidden" name="id" value="{{$dayOff->id}}">
                     </tr>
                 @endforeach
                 <tr data-repeater-item>
@@ -245,7 +246,7 @@
                 required>
             <option value="">-- --</option>
             @foreach($users as $consider)
-                <option value="{{$consider->id}}" @selected($consider->id == $application->considers->user_id)>{{$consider->name}}</option>
+                <option value="{{$consider->id}}" @selected(in_array($consider->id, $application->considers->pluck('id')->toArray()))>{{$consider->name}}</option>
             @endforeach
         </select>
         <!--end::Input-->

@@ -78,8 +78,8 @@
                         <!--begin::Table head-->
                         <thead>
                         <!--begin::Table row-->
-                        <tr class="text-start fw-bold fs-7 text-uppercase gs-0">
-                            <th>STT</th>
+                        <tr class="text-center fw-bold fs-7 text-uppercase gs-0">
+                            <th class="text-start">STT</th>
                             <th>Người tạo</th>
                             <th>Mã đơn</th>
                             <th>Trạng thái</th>
@@ -94,19 +94,19 @@
                         </thead>
                         <!--end::Table head-->
                         <!--begin::Table body-->
-                        <tbody class="fw-semibold text-gray-600">
+                        <tbody class="text-center fw-semibold text-gray-600">
                         @foreach($applications as $application)
                             <tr class="odd text-gray-800">
                                 <td>
                                     <a href="#">{{$loop->increment}}</a>
                                 </td>
                                 <td>
-                                    <a href="#" class="text-gray-800 text-hover-primary mb-1">{{$application->user->name}}</a>
+                                    <a href="{{route('users.show',$application->user)}}" class="text-gray-800 text-hover-primary mb-1">{{$application->user->name}}</a>
                                 </td>
                                 <td>{{$application->code}}</td>
                                 <td><label class="{{$application->state->class()}}">{{$application->state->text()}}</label></td>
                                 <td>{{$application->reason}}</td>
-                                <td>{{$application->user->role}}</td>
+                                <td>{{$application->user->roles->first()?->text}}</td>
                                 <td>
                                     <a href="{{asset('storage/'.$application->attached_files)}}"><i class="fa-solid fa-file"></i></a>
                                 </td>

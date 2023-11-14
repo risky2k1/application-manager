@@ -19,7 +19,7 @@ class ApplicationController extends Controller
         if (!empty($request->input('keyword'))) {
             $keyword = $request->input('keyword');
             $query->whereHas('user', function ($userQuery) use ($keyword) {
-                $userQuery->where('name', 'like', '%'.$keyword.'%');
+                $userQuery->where('name', 'like', '%' . $keyword . '%');
             });
         }
 
@@ -38,7 +38,7 @@ class ApplicationController extends Controller
     {
         $request->validate([
             'reason' => ['required', 'string'],
-            'is_paid_leave' => ['boolean'],
+            'is_paid_leave' => ['boolean', 'nullable'],
             'row_repeater' => ['array', 'nullable'],
             'row_repeater.*' => ['array', 'nullable'],
             'description' => ['string', 'nullable'],
@@ -157,15 +157,23 @@ class ApplicationController extends Controller
                     'end_time' => ['nullable', 'date_format:d/m/Y'],
                     'end_shift' => ['nullable', 'string', 'max:255'],
                 ])->validate();
-                $application->dayOffs()->create([
-                    'start_time' => carbon($dayOff['start_date']),
-                    'start_shift' => $dayOff['start_shift'],
-                    'end_time' => carbon($dayOff['end_date']),
-                    'end_shift' => $dayOff['end_shift'],
-                ]);
+                $application->dayOffs()->updateOrCreate(
+                    ['id' => $dayOff['id']],
+                    [
+                        'start_time' => carbon($dayOff['start_date']),
+                        'start_shift' => $dayOff['start_shift'],
+                        'end_time' => carbon($dayOff['end_date']),
+                        'end_shift' => $dayOff['end_shift'],
+                    ]
+                );
             }
         }
-
+        if (!empty($request->consider_id)) {
+            foreach ($request->consider_id as $considerId) {
+                $consider = User::findOrFail($considerId);
+                $application->considers()->toggle($consider);
+            }
+        }
         toastr()->success('Cập nhật đơn từ thành công');
 
         return redirect()->route('applications.index', ['type' => $application->type]);
