@@ -3,7 +3,7 @@
 // config for Risky2k1/ApplicationManager
 return [
     'application' => [
-        'default' => 'leave_application',
+        'default' => 'request_application',
         'type' => [
             'request_application' => [
                 'asset_transfer', // Bàn giao tài sản
