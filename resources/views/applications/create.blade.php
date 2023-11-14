@@ -12,9 +12,9 @@
             <form action="{{route('applications.store',['type'=>request()->route('type')])}}" method="post" enctype="multipart/form-data">
                 @csrf
                 @if(request()->route('type') == config('application-manager.application.default') )
-                    @include('vendor.application-manager.applications.components.create.leaving-application')
+                    @include('pages.applications.components.create.leaving-application')
                 @else
-                    @include('vendor.application-manager.applications.components.create.request-application')
+                    @include('pages.applications.components.create.request-application')
                 @endif
                 <div class="d-flex justify-content-center mt-5">
                     <button class="btn btn-primary" type="submit">Gửi</button>
@@ -24,5 +24,5 @@
     </div>
 @endsection
 @section('javascript')
-    @include('vendor.application-manager.applications.components.create.javascript')
+    @include('pages.applications.components.create.javascript')
 @endsection
