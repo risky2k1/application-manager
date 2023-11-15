@@ -9,12 +9,18 @@ composer require risky2k1/application-manager
 ```
 
 ### Publishing Assets
-You can publish the package's assets, such as migrations and views, config using the following Artisan commands:
+You can publish the package's migrations and config using the following Artisan commands:
 
 ```bash
 php artisan vendor:publish --provider="Risky2k1\ApplicationManager\ApplicationManagerServiceProvider" --tag="migrations"
-php artisan vendor:publish --provider="Risky2k1\ApplicationManager\ApplicationManagerServiceProvider" --tag="views"
 php artisan vendor:publish --provider="Risky2k1\ApplicationManager\ApplicationManagerServiceProvider" --tag="config"
+```
+
+(Optional) If you want to change the view and lang files:
+
+```bash
+php artisan vendor:publish --provider="Risky2k1\ApplicationManager\ApplicationManagerServiceProvider" --tag="views"
+php artisan vendor:publish --provider="Risky2k1\ApplicationManager\ApplicationManagerServiceProvider" --tag="langs"
 ```
 ### Run migration:
 
@@ -22,8 +28,8 @@ php artisan vendor:publish --provider="Risky2k1\ApplicationManager\ApplicationMa
 php artisan migrate
 ```
 
-### Cache Routes:
-(Optional) If you get errors about routes missing, you can try:
+### (Optional) Cache Routes:
+If you get errors about routes missing, you can try:
 ```bash
 php artisan route:cache
 ```
