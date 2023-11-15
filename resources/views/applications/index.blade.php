@@ -22,10 +22,10 @@
                                href="{{route('applications.index',['type'=>$type])}}">
                                 @switch($type)
                                     @case(config('application-manager.application.default'))
-                                        Đơn xin nghỉ
+                                        Đơn đề nghị
                                         @break
                                     @default
-                                        Đơn đề nghị
+                                        Đơn xin nghỉ
                                 @endswitch
                             </a>
                         </li>
@@ -72,6 +72,10 @@
             </form>
             <div class="card-toolbar">
                 <!--begin::Toolbar-->
+                <a href="{{route('applications.export',['type'=>request()->route('type')])}}" class="btn btn-sm btn-light btn-active-light-primary me-5">
+                    Xuất<i class="ms-2 fa-solid fa-file-export"></i>
+                </a>
+
                 <a href="{{route('applications.create',['type'=>request()->route('type')])}}">
                     <div class="d-flex justify-content-end" data-kt-customer-table-toolbar="base">
                         <!--begin::Add customer-->

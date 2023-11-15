@@ -18,7 +18,8 @@
     "require": {
         "php": "^8.1",
         "spatie/laravel-model-states": "^2.4",
-        "yoeunes/toastr": "^2.3"
+        "yoeunes/toastr": "^2.3",
+        "phpoffice/phpspreadsheet": "^1.28"
     },
     "autoload": {
         "psr-4": {

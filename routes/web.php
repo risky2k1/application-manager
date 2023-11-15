@@ -18,6 +18,7 @@ Route::prefix('/{type}')->group(function () {
     Route::get('/', [ApplicationController::class, 'index'])->name('applications.index');
     Route::get('/create', [ApplicationController::class, 'create'])->name('applications.create');
     Route::post('/', [ApplicationController::class, 'store'])->name('applications.store');
+    Route::get('/export', [ApplicationController::class, 'export'])->name('applications.export');
 });
 Route::get('/{application}/edit', [ApplicationController::class, 'edit'])->name('applications.edit');
 Route::patch('/{application}', [ApplicationController::class, 'update'])->name('applications.update');
