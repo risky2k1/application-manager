@@ -110,7 +110,7 @@
                 required>
             <option value="">-- --</option>
             @foreach(config('application-manager.application.shift') as $shift)
-                <option value="{{$shift}}">{{$trans('application-manager::vi.'.$shift)}}</option>
+                <option value="{{$shift}}">{{trans('application-manager::vi.'.$shift)}}</option>
             @endforeach
         </select>
         <!--end::Input-->

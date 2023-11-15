@@ -24,7 +24,7 @@ class ApplicationController extends Controller
         if (!empty($request->input('keyword'))) {
             $keyword = $request->input('keyword');
             $query->whereHas('user', function ($userQuery) use ($keyword) {
-                $userQuery->where('name', 'like', '%'.$keyword.'%');
+                $userQuery->where('name', 'like', '%' . $keyword . '%');
             });
         }
 
@@ -34,13 +34,13 @@ class ApplicationController extends Controller
 
         $applications = $query->where('type', $type)->latest()->paginate()->withQueryString();
 
-        return view('pages.applications.index', compact('applications'));
+        return view('application-manager::applications.index', compact('applications'));
     }
 
     public function create()
     {
         $users = User::all();
-        return view('pages.applications.create', compact('users'));
+        return view('application-manager::applications.create', compact('users'));
     }
 
     public function store(Request $request)
@@ -82,7 +82,7 @@ class ApplicationController extends Controller
         if ($request->hasFile('attached_files')) {
             $file = $request->file('attached_files');
             $application->update([
-                'attached_files' => Storage::disk('public')->putFileAs('application_attached_files/'.$application->user_id.'/'.$application->id, $file, $file->getClientOriginalName()),
+                'attached_files' => Storage::disk('public')->putFileAs('application_attached_files/' . $application->user_id . '/' . $application->id, $file, $file->getClientOriginalName()),
             ]);
         }
         if ($request->has('row_repeater')) {
@@ -117,7 +117,7 @@ class ApplicationController extends Controller
     {
         $users = User::all();
         $type = $application->type;
-        return view('pages.applications.edit', compact('application', 'type', 'users'));
+        return view('application-manager::applications.edit', compact('application', 'type', 'users'));
     }
 
     public function update(Request $request, Application $application)
@@ -155,7 +155,7 @@ class ApplicationController extends Controller
         if ($request->hasFile('attached_files')) {
             $file = $request->file('attached_files');
             $application->update([
-                'attached_files' => Storage::disk('public')->putFileAs('application_attached_files/'.$application->user_id.'/'.$application->id, $file, $file->getClientOriginalName()),
+                'attached_files' => Storage::disk('public')->putFileAs('application_attached_files/' . $application->user_id . '/' . $application->id, $file, $file->getClientOriginalName()),
             ]);
         }
         if ($request->has('row_repeater')) {
@@ -215,7 +215,6 @@ class ApplicationController extends Controller
             if (file_exists(storage_path('app/exports/applications/Danh_sách_đơn_từ_đề_nghị.xlsx'))) {
                 return response()->download(storage_path('app/exports/applications/Danh_sách_đơn_từ_đề_nghị.xlsx'));
             }
-
         } else {
             ExportLeavingApplicationJob::dispatch($type);
             if (file_exists(storage_path('app/exports/applications/Danh_sách_đơn_từ_xin_nghỉ.xlsx'))) {

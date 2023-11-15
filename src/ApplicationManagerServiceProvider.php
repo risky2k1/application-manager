@@ -29,26 +29,28 @@ class ApplicationManagerServiceProvider extends ServiceProvider
             ]);
 
             $this->publishes([
-                __DIR__.'/../config/application-manager.php' => config_path('application-manager.php'),
+                __DIR__ . '/../config/application-manager.php' => config_path('application-manager.php'),
             ], 'config');
 
             $this->publishes([
-                __DIR__.'/../database/migrations/create_applications_tables.php.stub' => database_path('migrations/'.date('Y_m_d_His', time()).'_create_applications_tables.php'),
+                __DIR__ . '/../database/migrations/create_applications_tables.php.stub' => database_path('migrations/' . date('Y_m_d_His', time()) . '_create_applications_tables.php'),
                 // you can add any number of migrations here
             ], 'migrations');
 
             $this->publishes([
-                __DIR__.'/../resources/views' => resource_path('views/pages'),
+                __DIR__ . '/../resources/views' => resource_path('views/pages'),
             ], 'views');
-            
+
+            $this->publishes([
+                __DIR__ . '/../lang' => $this->app->langPath('vendor/application-manager'),
+            ], 'langs');
         }
-        $this->loadViewsFrom(__DIR__.'/../resources/views', 'application-manager');
-        $this->loadTranslationsFrom(__DIR__.'/../lang', 'application-manager');
+        $this->loadViewsFrom(__DIR__ . '/../resources/views', 'application-manager');
+        $this->loadTranslationsFrom(__DIR__ . '/../lang', 'application-manager');
         //add Middleware
         $router = $this->app->make(Router::class);
         $router->aliasMiddleware('application.type', ValidateApplicationTypeMiddleware::class);
         $this->registerRoutes();
-
     }
 
     protected function registerRoutes()

@@ -13,7 +13,7 @@
                 required>
             <option value="">-- --</option>
             @foreach(config('application-manager.application.type.leave_application') as $reason)
-                <option value="{{$reason}}" @selected($application->reason == $reason)>{{$trans('application-manager::vi.'.$reason)}}</option>
+                <option value="{{$reason}}" @selected($application->reason == $reason)>{{trans('application-manager::vi.'.$reason)}}</option>
             @endforeach
         </select>
         <div class="fv-plugins-message-container invalid-feedback">@error('reason') {{$message}} @enderror</div>
