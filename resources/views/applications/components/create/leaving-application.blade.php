@@ -13,7 +13,7 @@
                 required>
             <option value="">-- --</option>
             @foreach(config('application-manager.application.type.leave_application') as $reason)
-                <option value="{{$reason}}">{{$reason}}</option>
+                <option value="{{$reason}}">{{trans('application-manager::vi.'.$reason)}}</option>
             @endforeach
         </select>
         <div class="fv-plugins-message-container invalid-feedback">@error('reason') {{$message}} @enderror</div>
@@ -67,7 +67,6 @@
                 </tr>
                 </thead>
                 <tbody data-repeater-list="row_repeater">
-                {{--                                    @foreach(config('application-manager.application.shift') as $shift)--}}
                 <tr data-repeater-item>
                     <td>
                         <select class="form-select @error('start_shift') is-invalid @enderror"
@@ -78,7 +77,7 @@
                                 name="start_shift">
                             <option value="">-- --</option>
                             @foreach(config('application-manager.application.shift') as $shift)
-                                <option value="{{$shift}}">{{$shift}}</option>
+                                <option value="{{$shift}}">{{trans('application-manager::vi.'.$shift)}}</option>
                             @endforeach
                         </select>
                     </td>
@@ -100,7 +99,7 @@
                         >
                             <option value="">-- --</option>
                             @foreach(config('application-manager.application.shift') as $shift)
-                                <option value="{{$shift}}">{{$shift}}</option>
+                                <option value="{{$shift}}">{{trans('application-manager::vi.'.$shift)}}</option>
                             @endforeach
                         </select>
                     </td>
@@ -126,7 +125,7 @@
                                 name="start_shift">
                             <option value="">-- --</option>
                             @foreach(config('application-manager.application.shift') as $shift)
-                                <option value="{{$shift}}">{{$shift}}</option>
+                                <option value="{{$shift}}">{{trans('application-manager::vi.'.$shift)}}</option>
                             @endforeach
                         </select>
                     </td>
@@ -147,7 +146,7 @@
                                 name="end_shift">
                             <option value="">-- --</option>
                             @foreach(config('application-manager.application.shift') as $shift)
-                                <option value="{{$shift}}">{{$shift}}</option>
+                                <option value="{{$shift}}">{{trans('application-manager::vi.'.$shift)}}</option>
                             @endforeach
                         </select>
                     </td>

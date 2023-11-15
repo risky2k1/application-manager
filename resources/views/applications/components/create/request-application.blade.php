@@ -13,7 +13,7 @@
                 required>
             <option value="">-- --</option>
             @foreach(config('application-manager.application.type.request_application') as $reason)
-                <option value="{{$reason}}">{{$reason}}</option>
+                <option value="{{$reason}}">{{trans('application-manager::vi.'.$reason)}}</option>
             @endforeach
         </select>
         <div class="fv-plugins-message-container invalid-feedback">@error('reason') {{$message}} @enderror</div>
@@ -110,7 +110,7 @@
                 required>
             <option value="">-- --</option>
             @foreach(config('application-manager.application.shift') as $shift)
-                <option value="{{$shift}}">{{$shift}}</option>
+                <option value="{{$shift}}">{{$trans('application-manager::vi.'.$shift)}}</option>
             @endforeach
         </select>
         <!--end::Input-->

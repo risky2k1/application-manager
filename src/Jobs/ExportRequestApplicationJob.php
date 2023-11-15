@@ -51,8 +51,8 @@ class ExportRequestApplicationJob implements ShouldQueue
                 $application->code ?? '',
                 $application->user->name ?? '',
                 $application->state->text() ?? '',
-                $application->reason ?? '',
-                $application->type ?? '',
+                trans('application-manager::vi.' . $application->reason),
+                trans('application-manager::vi.' . $application->type),
                 $application->user->roles->first()?->text ?? '',
                 $application->name ?? '',
                 $application->user->name ?? '',
@@ -65,7 +65,7 @@ class ExportRequestApplicationJob implements ShouldQueue
 
         $sheet->fromArray($requestApplications, null, 'A1');
 
-        $headerRange = 'A1:'.$sheet->getHighestDataColumn().'1';
+        $headerRange = 'A1:' . $sheet->getHighestDataColumn() . '1';
         $sheet->getStyle($headerRange)->getFill()->setFillType(FILL::FILL_SOLID)->getStartColor()->setARGB('FFA0A0A0');
         $sheet->getStyle($headerRange)->getFont()->setBold(true);
 

@@ -131,12 +131,12 @@
                                                @if($application->isPending)data-bs-toggle="modal" data-bs-target="#state_modal" data-id="{{$application->id}}"
                                                data-url="{{route('applications.update.state',$application)}}"@endif
                                         >{{$application->state->text()}}</label></td>
-                                    <td>{{$application->reason}}</td>
+                                    <td>{{trans('application-manager::vi.'.$application->reason)}}</td>
                                     <td>{{$application->user->roles->first()?->text}}</td>
                                     <td>
                                         <a href="{{asset('storage/'.$application->attached_files)}}"><i class="fa-solid fa-file"></i></a>
                                     </td>
-                                    <td>{{$$application->number_of_day_off}}</td>
+                                    <td>{{$application->number_of_day_off}}</td>
                                     <td>{{carbon($application->created_at,'Y-m-d','d-m-Y')}}</td>
                                     <td class="d-flex align-items-center justify-content-end">
                                         <a href="{{route('applications.edit',$application)}}" class="col-auto me-5" data-bs-toggle="tooltip" data-bs-placement="bottom" aria-label="Sửa"
@@ -182,7 +182,7 @@
                 </div>
 
                 <div class="modal-footer">
-                    <form method="post" action="{{route('applications.update.state',$application)}}" class="update-state-form">
+                    <form method="post" action="#" class="update-state-form">
                         @csrf
                         @method('PATCH')
                         <input type="text" name="state" hidden class="input-application-state">
