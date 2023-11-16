@@ -54,7 +54,7 @@
                                     data-control="select2"
                                     data-placeholder="Trạng thái"
                             >
-                                <option value="null">Tất cả</option>
+                                <option value="all">Tất cả</option>
                                 <option value="pending" @selected(request()->input('state') == 'pending')>Chờ duyệt</option>
                                 <option value="approved" @selected(request()->input('state') == 'approved')>Đã duyệt</option>
                                 <option value="declined" @selected(request()->input('state') == 'declined')>Không duyệt</option>
@@ -72,7 +72,7 @@
             </form>
             <div class="card-toolbar">
                 <!--begin::Toolbar-->
-                <a href="{{route('applications.export',['type'=>request()->route('type')])}}" class="btn btn-sm btn-light btn-active-light-primary me-5">
+                <a href="{{route('applications.export',['type'=>request()->route('type'),'state'=>request('state')])}}" class="btn btn-sm btn-light btn-active-light-primary me-5">
                     Xuất<i class="ms-2 fa-solid fa-file-export"></i>
                 </a>
 
@@ -128,22 +128,26 @@
                                     <td>{{$application->code}}</td>
                                     <td>
                                         <label class="{{$application->state->class()}} application-state-label"
-                                               @if($application->isPending)data-bs-toggle="modal" data-bs-target="#state_modal" data-id="{{$application->id}}"
+                                               @if($application->isPending && auth()->id() == $application->reviewers->id)data-bs-toggle="modal" data-bs-target="#state_modal" data-id="{{$application->id}}"
                                                data-url="{{route('applications.update.state',$application)}}"@endif
                                         >{{$application->state->text()}}</label></td>
                                     <td>{{trans('application-manager::vi.'.$application->reason)}}</td>
                                     <td>{{$application->user->roles->first()?->text}}</td>
                                     <td>
-                                        <a href="{{asset('storage/'.$application->attached_files)}}"><i class="fa-solid fa-file"></i></a>
+                                        <a href="{{route('applications.download.attached.files',$application)}}">@if(!empty($application->attached_files))<i class="fa-solid fa-file"></i>@endif</a>
                                     </td>
                                     <td>{{$application->number_of_day_off}}</td>
                                     <td>{{carbon($application->created_at,'Y-m-d','d-m-Y')}}</td>
                                     <td class="d-flex align-items-center justify-content-end">
                                         <a href="{{route('applications.edit',$application)}}" class="col-auto me-5" data-bs-toggle="tooltip" data-bs-placement="bottom" aria-label="Sửa"
                                            data-bs-original-title="Sửa" data-kt-initialized="1"><i class="fa-solid fa-pen p-2"></i></a>
-                                        <button type="button" class="border border-white delete_button" data-delete="Đơn từ">
-                                            <i class="fa-solid fa-trash"></i>
-                                        </button>
+                                        <form action="{{route('applications.destroy',$application)}}" method="post" class="delete_form">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="button" class="border border-white delete_button" data-delete="Đơn từ">
+                                                <i class="fa-solid fa-trash"></i>
+                                            </button>
+                                        </form>
                                     </td>
                                 </tr>
                             @endforeach
@@ -197,5 +201,5 @@
 
 @endsection
 @section('javascript')
-    @include('pages.applications.components.index.javascript')
+    @include('application-manager::applications.components.index.javascript')
 @endsection

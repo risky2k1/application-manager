@@ -120,54 +120,6 @@
                         <input type="hidden" name="id" value="{{$dayOff->id}}">
                     </tr>
                 @endforeach
-                <tr data-repeater-item>
-                    <td>
-                        <select class="form-select @error('start_shift') is-invalid @enderror"
-                                data-control="select2"
-                                data-placeholder="Ca bắt đầu"
-                                data-allow-clear="true"
-                                data-hide-search="true"
-                                name="start_shift">
-                            <option value="">-- --</option>
-                            @foreach(config('application-manager.application.shift') as $shift)
-                                <option value="{{$shift}}">{{trans('application-manager::vi.'.$application->reason)}}</option>
-                            @endforeach
-                        </select>
-                    </td>
-                    <td>
-                        <input type="text"
-                               class="form-control mb-3 mb-lg-0 @error('start_date') is-invalid @enderror edit-ajax date-picker"
-                               name="start_date"
-                               placeholder="Thời gian bắt đầu"
-                               autocomplete="off"
-                        />
-                    </td>
-                    <td>
-                        <select class="form-select @error('end_shift') is-invalid @enderror"
-                                data-control="select2"
-                                data-placeholder="Ca kết thúc"
-                                data-allow-clear="true"
-                                data-hide-search="true"
-                                name="end_shift">
-                            <option value="">-- --</option>
-                            @foreach(config('application-manager.application.shift') as $shift)
-                                <option value="{{$shift}}">{{trans('application-manager::vi.'.$shift)}}</option>
-                            @endforeach
-                        </select>
-                    </td>
-                    <td>
-                        <input type="text"
-                               class="form-control mb-3 mb-lg-0 @error('end_date') is-invalid @enderror edit-ajax date-picker"
-                               name="end_date"
-                               placeholder="Thời gian kết thúc"
-                               autocomplete="off"
-                        />
-                    </td>
-                    <td>
-                        <div data-repeater-delete class="delete"><i class="fa-solid fa-trash"></i></div>
-                    </td>
-                    <input type="hidden" class="edit-ajax" name="id" data-column="id">
-                </tr>
                 </tbody>
                 <!--end::Table body-->
             </table>
@@ -198,8 +150,8 @@
         <label class="fw-semibold fs-6 mb-2" for="attached_files">Tệp đính kèm</label>
         <!--end::Label-->
         <!--begin::Input-->
-        <input type="file" name="attached_files" id="attached_files" value="{{$application->attached_files}}"
-               class="form-control mb-3 mb-lg-0 @error('attached_files') is-invalid @enderror">
+        <input type="file" name="attached_files[]" id="attached_files"
+               class="form-control mb-3 mb-lg-0 @error('attached_files') is-invalid @enderror" multiple>
         <!--end::Input-->
         <div class="fv-plugins-message-container invalid-feedback">@error('attached_files') {{$message}} @enderror</div>
         <!--end::Input group-->

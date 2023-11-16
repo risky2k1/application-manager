@@ -4,7 +4,7 @@
         <!--begin::Card header-->
         <div class="card-header border-0 pt-6">
             <div class="card-toolbar">
-                <h2>Thông Tin Đơn từ</h2>
+                <h2 class="text-uppercase">Thông Tin {{trans('application-manager::vi.'.request()->route('type'))}}</h2>
             </div>
         </div>
         <!--end::Card header-->
@@ -12,9 +12,9 @@
             <form action="{{route('applications.store',['type'=>request()->route('type')])}}" method="post" enctype="multipart/form-data">
                 @csrf
                 @if(request()->route('type') == config('application-manager.application.default') )
-                    @include('pages.applications.components.create.request-application')
+                    @include('application-manager::applications.components.create.request-application')
                 @else
-                    @include('pages.applications.components.create.leaving-application')
+                    @include('application-manager::applications.components.create.leaving-application')
                 @endif
                 <div class="d-flex justify-content-center mt-5">
                     <button class="btn btn-primary" type="submit">Gửi</button>
@@ -24,5 +24,5 @@
     </div>
 @endsection
 @section('javascript')
-    @include('pages.applications.components.create.javascript')
+    @include('application-manager::applications.components.create.javascript')
 @endsection

@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Spatie\ModelStates\Exceptions\CouldNotPerformTransition;
+use Illuminate\Support\Fluent;
 
 class ApplicationController extends Controller
 {
@@ -28,7 +29,7 @@ class ApplicationController extends Controller
             });
         }
 
-        if (!empty($request->input('state'))) {
+        if (!empty($request->input('state')) && $request->input('state') !== 'all') {
             $query->where('state', $request->input('state'));
         }
 
@@ -63,14 +64,14 @@ class ApplicationController extends Controller
 
         $application = Application::create([
             'reason' => $request->input('reason'),
-            'code' => Application::generateCode(1),
+            'code' => Application::generateCode(session('company_id')),
             'is_paid_leave' => $request->input('is_paid_leave'),
             'description' => $request->input('description'),
             'reviewer_id' => $request->input('reviewer_id'),
             'user_id' => Auth::id(),
             'state' => Pending::class,
             'type' => $request->route('type'),
-            'company_id' => session('company_id') ?? 1,
+            'company_id' => session('company_id'),
 
             'name' => $request->input('name'),
             'money_amount' => $request->input('money_amount'),
@@ -80,19 +81,31 @@ class ApplicationController extends Controller
         ]);
 
         if ($request->hasFile('attached_files')) {
-            $file = $request->file('attached_files');
+            $attachedFiles = [];
+
+            foreach ($request->attached_files as $file) {
+                $attachedFile = Storage::disk('public')->putFileAs('application_attached_files/'.$application->user_id.'/'.$application->id, $file, $file->getClientOriginalName());
+                $attachedFiles[] = $attachedFile;
+            }
             $application->update([
-                'attached_files' => Storage::disk('public')->putFileAs('application_attached_files/' . $application->user_id . '/' . $application->id, $file, $file->getClientOriginalName()),
+                'attached_files' => $attachedFiles,
             ]);
         }
+
         if ($request->has('row_repeater')) {
             foreach ($request->input('row_repeater') as $dayOff) {
-                Validator::make($dayOff, [
+                $validator = Validator::make($dayOff, [
                     'start_time' => ['nullable', 'date_format:d/m/Y'],
                     'start_shift' => ['nullable', 'string', 'max:255'],
-                    'end_time' => ['nullable', 'date_format:d/m/Y'],
+                    'end_time' => ['nullable', 'date_format:d/m/Y', 'after_or_equal:start_time'],
                     'end_shift' => ['nullable', 'string', 'max:255'],
-                ])->validate();
+                ]);
+                $validator->sometimes('end_time', 'after_or_equal:start_time', function (Fluent $input) {
+                    return !empty($input->start_time);
+                });
+
+                $validator->validate();
+
                 $application->dayOffs()->create([
                     'start_time' => carbon($dayOff['start_date']),
                     'start_shift' => $dayOff['start_shift'],
@@ -153,19 +166,31 @@ class ApplicationController extends Controller
         ]);
 
         if ($request->hasFile('attached_files')) {
-            $file = $request->file('attached_files');
+            $attachedFiles = [];
+
+            foreach ($request->attached_files as $file) {
+                $attachedFile = Storage::disk('public')->putFileAs('application_attached_files/'.$application->user_id.'/'.$application->id, $file, $file->getClientOriginalName());
+                $attachedFiles[] = $attachedFile;
+            }
             $application->update([
-                'attached_files' => Storage::disk('public')->putFileAs('application_attached_files/' . $application->user_id . '/' . $application->id, $file, $file->getClientOriginalName()),
+                'attached_files' => $attachedFiles,
             ]);
         }
+
         if ($request->has('row_repeater')) {
             foreach ($request->input('row_repeater') as $dayOff) {
-                Validator::make($dayOff, [
+                $validator = Validator::make($dayOff, [
                     'start_time' => ['nullable', 'date_format:d/m/Y'],
                     'start_shift' => ['nullable', 'string', 'max:255'],
-                    'end_time' => ['nullable', 'date_format:d/m/Y'],
+                    'end_time' => ['nullable', 'date_format:d/m/Y', 'after_or_equal:start_time'],
                     'end_shift' => ['nullable', 'string', 'max:255'],
-                ])->validate();
+                ]);
+                $validator->sometimes('end_time', 'after_or_equal:start_time', function (Fluent $input) {
+                    return !empty($input->start_time);
+                });
+
+                $validator->validate();
+
                 $application->dayOffs()->updateOrCreate(
                     ['id' => $dayOff['id']],
                     [
@@ -188,6 +213,14 @@ class ApplicationController extends Controller
         return redirect()->route('applications.index', ['type' => $application->type]);
     }
 
+    public function destroy(Application $application)
+    {
+        $type = $application->type;
+        $application->deleteOrFail();
+
+        return redirect()->route('applications.index', ['type' => $type]);
+    }
+
     public function updateApplicationState(Request $request)
     {
         $application = Application::findOrFail($request->application_id);
@@ -208,18 +241,45 @@ class ApplicationController extends Controller
         return redirect()->route('applications.index', ['type' => $application->type]);
     }
 
-    public function export(string $type)
+    public function export(Request $request, string $type)
     {
+        $dataToDispatch = [];
+        if (!empty($request->state) && $request->input('state') !== 'all') {
+            $dataToDispatch['state'] = $request->state;
+        }
+        $dataToDispatch['type'] = $type;
         if ($type == config('application-manager.application.default')) {
-            ExportRequestApplicationJob::dispatch($type);
+            ExportRequestApplicationJob::dispatch($dataToDispatch);
             if (file_exists(storage_path('app/exports/applications/Danh_sách_đơn_từ_đề_nghị.xlsx'))) {
                 return response()->download(storage_path('app/exports/applications/Danh_sách_đơn_từ_đề_nghị.xlsx'));
             }
         } else {
-            ExportLeavingApplicationJob::dispatch($type);
+            ExportLeavingApplicationJob::dispatch($dataToDispatch);
             if (file_exists(storage_path('app/exports/applications/Danh_sách_đơn_từ_xin_nghỉ.xlsx'))) {
                 return response()->download(storage_path('app/exports/applications/Danh_sách_đơn_từ_xin_nghỉ.xlsx'));
             }
         }
     }
+
+    public function downloadAttachedFiles(Application $application)
+    {
+        $zipFileName = 'Tệp đính kèm của đơn từ '.$application->code.'.zip';
+        $zipFilePath = storage_path("app/public/application_attached_files/".$application->user->id."/".$application->id."/".$zipFileName);
+        $zip = new \ZipArchive();
+        if ($zip->open($zipFilePath, ZipArchive::CREATE) === true) {
+            $folderPath ="public/application_attached_files/{$application->user->id}/{$application->id}";
+            if (Storage::exists($folderPath)) {
+                $files = Storage::files($folderPath);
+            }
+
+            foreach ($files as $file) {
+                $relativePath = str_replace($folderPath.'/', '', $file);
+                $zip->addFile(storage_path('app/'.$file), $relativePath);
+            }
+        }
+        $zip->close();
+
+        return response()->download($zipFilePath, $zipFileName)->deleteFileAfterSend(true);
+    }
+
 }

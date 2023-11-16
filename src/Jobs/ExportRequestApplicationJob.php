@@ -25,11 +25,11 @@ class ExportRequestApplicationJob implements ShouldQueue
      * Create a new job instance.
      */
 
-    protected string $type;
+    protected array $dataToDispatch;
 
-    public function __construct($type)
+    public function __construct($dataToDispatch)
     {
-        $this->type = $type;
+        $this->dataToDispatch = $dataToDispatch;
     }
 
     /**
@@ -37,7 +37,13 @@ class ExportRequestApplicationJob implements ShouldQueue
      */
     public function handle()
     {
-        $applications = Application::with('user')->where('type', $this->type)->get();
+        $query = Application::with('user')->where('type', $this->dataToDispatch['type']);
+
+        if (isset($this->dataToDispatch['state'])) {
+            $query->where('state', $this->dataToDispatch['state']);
+        }
+
+        $applications = $query->get();
 
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
@@ -51,13 +57,13 @@ class ExportRequestApplicationJob implements ShouldQueue
                 $application->code ?? '',
                 $application->user->name ?? '',
                 $application->state->text() ?? '',
-                trans('application-manager::vi.' . $application->reason),
-                trans('application-manager::vi.' . $application->type),
+                trans('application-manager::vi.'.$application->reason),
+                trans('application-manager::vi.'.$application->type),
                 $application->user->roles->first()?->text ?? '',
                 $application->name ?? '',
                 $application->user->name ?? '',
                 $application->bank_account ?? '',
-                $application->delivery_date ?? '',
+                carbon($application->delivery_date, 'Y-m-d', 'd-m-Y') ?? '',
             ];
 
             $requestApplications[] = $rowData;
@@ -65,7 +71,7 @@ class ExportRequestApplicationJob implements ShouldQueue
 
         $sheet->fromArray($requestApplications, null, 'A1');
 
-        $headerRange = 'A1:' . $sheet->getHighestDataColumn() . '1';
+        $headerRange = 'A1:'.$sheet->getHighestDataColumn().'1';
         $sheet->getStyle($headerRange)->getFill()->setFillType(FILL::FILL_SOLID)->getStartColor()->setARGB('FFA0A0A0');
         $sheet->getStyle($headerRange)->getFont()->setBold(true);
 

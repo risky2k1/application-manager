@@ -41,13 +41,13 @@ return new class extends Migration
 
          Schema::create('application_consider', function (Blueprint $table) {
             $table->foreignId('user_id')->constrained('users');
-            $table->foreignId('application_id')->constrained('applications');
+            $table->foreignId('application_id')->constrained('applications')->cascadeOnDelete();
         });
 
         Schema::create('application_dayoffs', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('application_id')->constrained('applications');
+            $table->foreignId('application_id')->constrained('applications')->cascadeOnDelete();
 
             $table->date('start_time')->nullable()->comment('Ngày bắt đầu nghỉ');
             $table->string('start_shift')->nullable()->comment('Ca bắt đầu nghỉ');

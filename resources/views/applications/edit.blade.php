@@ -13,9 +13,9 @@
                 @csrf
                 @method('PATCH')
                 @if($application->type == config('application-manager.application.default') )
-                    @include('pages.applications.components.edit.request-application')
+                    @include('application-manager::applications.components.edit.request-application')
                 @else
-                    @include('pages.applications.components.edit.leaving-application')
+                    @include('application-manager::applications.components.edit.leaving-application')
                 @endif
                 <div class="d-flex justify-content-center mt-5">
                     <button class="btn btn-primary" type="submit">Gửi</button>
@@ -25,5 +25,5 @@
     </div>
 @endsection
 @section('javascript')
-    @include('pages.applications.components.edit.javascript')
+    @include('application-manager::applications.components.edit.javascript')
 @endsection

@@ -27,7 +27,7 @@ return [
     'customer_meeting' => 'Gặp khách hàng',
 
     'shift' => 'Ca',
-    'morning' => 'ca sáng',
-    'afternoon' => ' ca chiều',
+    'morning' => 'Ca sáng',
+    'afternoon' => ' Ca chiều',
 
 ];

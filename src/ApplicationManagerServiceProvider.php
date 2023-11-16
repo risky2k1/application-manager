@@ -38,7 +38,7 @@ class ApplicationManagerServiceProvider extends ServiceProvider
             ], 'migrations');
 
             $this->publishes([
-                __DIR__ . '/../resources/views' => resource_path('views/pages'),
+                __DIR__ . '/../resources/views' => resource_path('views/vendor/application-manager'),
             ], 'views');
 
             $this->publishes([

@@ -42,23 +42,6 @@
 
         hide: function (deleteElement) {
             $(this).slideUp(deleteElement);
-            // const table = $(this).closest('table').data('table');
-            {{--if (id) {--}}
-            {{--    $.ajax({--}}
-            {{--        url: "{{route('ajax.profiles.table.destroy', $profile)}}",--}}
-            {{--        method: "delete",--}}
-            {{--        headers: {--}}
-            {{--            'X-CSRF-TOKEN': csrfToken--}}
-            {{--        },--}}
-            {{--        data: {'id': id, 'table': table},--}}
-            {{--        success: function (response) {--}}
-
-            {{--        },--}}
-            {{--        error: function (request, error) {--}}
-            {{--            alert(" Can't do because: " + error);--}}
-            {{--        },--}}
-            {{--    })--}}
-            {{--}--}}
         }
     });
 </script>

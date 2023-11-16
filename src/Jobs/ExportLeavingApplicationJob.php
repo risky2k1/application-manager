@@ -22,11 +22,11 @@ class ExportLeavingApplicationJob implements ShouldQueue
      * Create a new job instance.
      */
 
-    protected string $type;
+    protected array $dataToDispatch;
 
-    public function __construct($type)
+    public function __construct($dataToDispatch)
     {
-        $this->type = $type;
+        $this->dataToDispatch = $dataToDispatch;
     }
 
     /**
@@ -34,7 +34,13 @@ class ExportLeavingApplicationJob implements ShouldQueue
      */
     public function handle()
     {
-        $applications = Application::with('user')->where('type', $this->type)->get();
+        $query = Application::with('user')->where('type', $this->dataToDispatch['type']);
+
+        if (isset($this->dataToDispatch['state'])) {
+            $query->where('state', $this->dataToDispatch['state']);
+        }
+
+        $applications = $query->get();
 
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
@@ -53,7 +59,7 @@ class ExportLeavingApplicationJob implements ShouldQueue
                 $application->user->roles->first()?->text,
                 $application->description,
                 $application->reviewers->name,
-                $application->created_at,
+                carbon($application->created_at, 'Y-m-d', 'd-m-Y'),
                 $application->number_of_day_off,
             ];
 

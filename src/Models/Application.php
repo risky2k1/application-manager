@@ -42,6 +42,7 @@ class Application extends Model
     ];
     protected $casts = [
         'state' => ApplicationState::class,
+        'attached_files' => 'array',
     ];
 
     public function user(): BelongsTo
@@ -80,19 +81,19 @@ class Application extends Model
 
     public static function generateCode($companyId): string
     {
-        //        $words = explode(" ", $company->name);
-        //        $acronym = "";
-        //        foreach ($words as $word) {
-        //            $acronym .= mb_substr($word, 0, 1);
-        //        }
-        //        $codesAvailable = Application::pluck('code')->toArray();
-        //        do {
-        //            $order_code = $acronym.'-'.$vietnameseCompanyOrders ++ .'-'.Carbon::now()->year;
-        //        } while (in_array($order_code, $codesAvailable));
-        //
-        //        return Str::upper($order_code);
-        $all = Application::all()->count();
-        return $all + 1;
+        $prefix = 'ĐT-'.str_pad($companyId, 2, '0', STR_PAD_LEFT);
+
+        $countApplications = Application::all()->count();
+
+        $formattedNumber = sprintf('%05d', $countApplications);
+
+        $codesAvailable = Application::pluck('code')->toArray();
+        do {
+            $code = $prefix.'-'.$formattedNumber;
+            $formattedNumber++;
+        } while (in_array($code, $codesAvailable));
+
+        return $code;
     }
 
     protected function isPending(): Attribute

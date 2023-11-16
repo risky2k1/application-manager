@@ -134,7 +134,7 @@
         <label class="fw-semibold fs-6 mb-2" for="attached_files">Tệp đính kèm</label>
         <!--end::Label-->
         <!--begin::Input-->
-        <input type="file" name="attached_files" id="attached_files" class="form-control mb-3 mb-lg-0 @error('attached_files') is-invalid @enderror">
+        <input type="file" name="attached_files[]" id="attached_files" class="form-control mb-3 mb-lg-0 @error('attached_files') is-invalid @enderror" multiple>
         <!--end::Input-->
         <div class="fv-plugins-message-container invalid-feedback">@error('attached_files') {{$message}} @enderror</div>
         <!--end::Input group-->
