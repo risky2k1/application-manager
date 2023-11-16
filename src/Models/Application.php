@@ -22,6 +22,7 @@ class Application extends Model
     protected $fillable = [
         'user_id',
         'reviewer_id',
+        'proponent_id',
         'name',
         'code',
         'state',
@@ -55,6 +56,11 @@ class Application extends Model
         return $this->belongsTo(User::class, 'reviewer_id');
     }
 
+    public function proponent(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'proponent_id');
+    }
+
     public function considers(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'application_consider', 'application_id', 'user_id');
@@ -81,7 +87,7 @@ class Application extends Model
 
     public static function generateCode($companyId): string
     {
-        $prefix = 'ĐT-'.str_pad($companyId, 2, '0', STR_PAD_LEFT);
+        $prefix = 'ĐT-' . str_pad($companyId, 2, '0', STR_PAD_LEFT);
 
         $countApplications = Application::all()->count() + 1;
 
@@ -89,7 +95,7 @@ class Application extends Model
 
         $codesAvailable = Application::pluck('code')->toArray();
         do {
-            $code = $prefix.'-'.$formattedNumber;
+            $code = $prefix . '-' . $formattedNumber;
             $formattedNumber++;
         } while (in_array($code, $codesAvailable));
 

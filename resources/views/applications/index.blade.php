@@ -150,6 +150,7 @@
                                         </form>
                                     </td>
                                 </tr>
+                                @include('application-manager::applications.components.index.show-modal')
                             @endforeach
                             </tbody>
                             <!--end::Table body-->
@@ -198,7 +199,6 @@
             </div>
         </div>
     </div>
-    @include('application-manager::applications.components.index.show-modal')
 @endsection
 @section('javascript')
     @include('application-manager::applications.components.index.javascript')
