@@ -50,7 +50,7 @@ class Application extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function reviewers(): BelongsTo
+    public function reviewer(): BelongsTo
     {
         return $this->belongsTo(User::class, 'reviewer_id');
     }
@@ -83,7 +83,7 @@ class Application extends Model
     {
         $prefix = 'ĐT-'.str_pad($companyId, 2, '0', STR_PAD_LEFT);
 
-        $countApplications = Application::all()->count();
+        $countApplications = Application::all()->count() + 1;
 
         $formattedNumber = sprintf('%05d', $countApplications);
 

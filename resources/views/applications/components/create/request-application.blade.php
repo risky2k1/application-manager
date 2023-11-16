@@ -50,11 +50,11 @@
                 data-placeholder="Người đề nghị"
                 data-allow-clear="true"
                 data-hide-search="true"
-                name="user_id"
-                id="user_id" required>
+                name="proponent_id"
+                id="proponent_id" required>
             <option value="">-- --</option>
-            @foreach($users as $user)
-                <option value="{{$user->id}}" @selected(auth()->id() == $user->id)>{{$user->name}}</option>
+            @foreach($users as $proponent)
+                <option value="{{$proponent->id}}" @selected(auth()->id() == $proponent->id)>{{$proponent->name}}</option>
             @endforeach
         </select>
         <!--end::Input-->

@@ -125,10 +125,10 @@
                                     <td>
                                         <a href="{{route('users.show',$application->user)}}" class="text-gray-800 text-hover-primary mb-1">{{$application->user->name}}</a>
                                     </td>
-                                    <td>{{$application->code}}</td>
+                                    <td class="text-hover-primary" data-bs-toggle="modal" data-bs-target="#show-modal">{{$application->code}}</td>
                                     <td>
                                         <label class="{{$application->state->class()}} application-state-label"
-                                               @if($application->isPending && auth()->id() == $application->reviewers->id)data-bs-toggle="modal" data-bs-target="#state_modal" data-id="{{$application->id}}"
+                                               @if($application->isPending && auth()->id() == $application->reviewer->id)data-bs-toggle="modal" data-bs-target="#state_modal" data-id="{{$application->id}}"
                                                data-url="{{route('applications.update.state',$application)}}"@endif
                                         >{{$application->state->text()}}</label></td>
                                     <td>{{trans('application-manager::vi.'.$application->reason)}}</td>
@@ -198,7 +198,7 @@
             </div>
         </div>
     </div>
-
+    @include('application-manager::applications.components.index.show-modal')
 @endsection
 @section('javascript')
     @include('application-manager::applications.components.index.javascript')

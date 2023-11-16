@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Spatie\ModelStates\Exceptions\CouldNotPerformTransition;
 use Illuminate\Support\Fluent;
+use ZipArchive;
 
 class ApplicationController extends Controller
 {
@@ -53,7 +54,8 @@ class ApplicationController extends Controller
             'row_repeater.*' => ['array', 'nullable'],
             'description' => ['string', 'nullable'],
             'reviewer_id' => ['required', 'string'],
-            'attached_files' => ['file'],
+            'attached_files' => ['array', 'nullable'],
+            'attached_files.*' => ['nullable', 'mimes:doc,docx,xls,xlsx,pdf,ppt,pptx,jpeg,png,gif'],
 
             'name' => ['string', 'nullable'],
             'money_amount' => ['numeric', 'min:0', 'nullable'],
@@ -69,6 +71,7 @@ class ApplicationController extends Controller
             'description' => $request->input('description'),
             'reviewer_id' => $request->input('reviewer_id'),
             'user_id' => Auth::id(),
+            'proponent_id' => $request->input('proponent_id'),
             'state' => Pending::class,
             'type' => $request->route('type'),
             'company_id' => session('company_id'),
@@ -84,7 +87,7 @@ class ApplicationController extends Controller
             $attachedFiles = [];
 
             foreach ($request->attached_files as $file) {
-                $attachedFile = Storage::disk('public')->putFileAs('application_attached_files/'.$application->user_id.'/'.$application->id, $file, $file->getClientOriginalName());
+                $attachedFile = Storage::disk('public')->putFileAs('application_attached_files/' . $application->user_id . '/' . $application->id, $file, $file->getClientOriginalName());
                 $attachedFiles[] = $attachedFile;
             }
             $application->update([
@@ -142,7 +145,8 @@ class ApplicationController extends Controller
             'row_repeater.*' => ['array', 'nullable'],
             'description' => ['string', 'nullable'],
             'reviewer_id' => ['required', 'string'],
-            'attached_files' => ['file'],
+            'attached_files' => ['array', 'nullable'],
+            'attached_files.*' => ['nullable', 'mimes:doc,docx,xls,pdf,xlsx,ppt,pptx,jpeg,png,gif'],
 
             'name' => ['string', 'nullable'],
             'money_amount' => ['numeric', 'min:0', 'nullable'],
@@ -156,7 +160,7 @@ class ApplicationController extends Controller
             'is_paid_leave' => $request->input('is_paid_leave'),
             'description' => $request->input('description'),
             'reviewer_id' => $request->input('reviewer_id'),
-            'user_id' => Auth::id(),
+            'proponent_id' =>  $request->input('proponent_id'),
 
             'name' => $request->input('name'),
             'money_amount' => $request->input('money_amount'),
@@ -169,7 +173,7 @@ class ApplicationController extends Controller
             $attachedFiles = [];
 
             foreach ($request->attached_files as $file) {
-                $attachedFile = Storage::disk('public')->putFileAs('application_attached_files/'.$application->user_id.'/'.$application->id, $file, $file->getClientOriginalName());
+                $attachedFile = Storage::disk('public')->putFileAs('application_attached_files/' . $application->user_id . '/' . $application->id, $file, $file->getClientOriginalName());
                 $attachedFiles[] = $attachedFile;
             }
             $application->update([
@@ -263,23 +267,22 @@ class ApplicationController extends Controller
 
     public function downloadAttachedFiles(Application $application)
     {
-        $zipFileName = 'Tệp đính kèm của đơn từ '.$application->code.'.zip';
-        $zipFilePath = storage_path("app/public/application_attached_files/".$application->user->id."/".$application->id."/".$zipFileName);
+        $zipFileName = 'Tệp đính kèm của đơn từ ' . $application->code . '.zip';
+        $zipFilePath = storage_path("app/public/application_attached_files/" . $application->user->id . "/" . $application->id . "/" . $zipFileName);
         $zip = new \ZipArchive();
         if ($zip->open($zipFilePath, ZipArchive::CREATE) === true) {
-            $folderPath ="public/application_attached_files/{$application->user->id}/{$application->id}";
+            $folderPath = "public/application_attached_files/{$application->user->id}/{$application->id}";
             if (Storage::exists($folderPath)) {
                 $files = Storage::files($folderPath);
             }
 
             foreach ($files as $file) {
-                $relativePath = str_replace($folderPath.'/', '', $file);
-                $zip->addFile(storage_path('app/'.$file), $relativePath);
+                $relativePath = str_replace($folderPath . '/', '', $file);
+                $zip->addFile(storage_path('app/' . $file), $relativePath);
             }
         }
         $zip->close();
 
         return response()->download($zipFilePath, $zipFileName)->deleteFileAfterSend(true);
     }
-
 }

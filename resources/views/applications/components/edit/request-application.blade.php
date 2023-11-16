@@ -49,11 +49,11 @@
                 data-placeholder="Chọn Lý do"
                 data-allow-clear="true"
                 data-hide-search="true"
-                name="user_id"
-                id="user_id">
+                name="proponent_id"
+                id="proponent_id">
             <option value="">-- --</option>
-            @foreach($users as $user)
-                <option value="{{$user->id}}" @selected($application->user_id == $user->id)>{{$user->name}}</option>
+            @foreach($users as $proponent)
+                <option value="{{$proponent->id}}" @selected($application->user_id == $proponent->id)>{{$proponent->name}}</option>
             @endforeach
         </select>
         <!--end::Input-->
