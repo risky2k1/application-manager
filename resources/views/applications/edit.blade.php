@@ -18,7 +18,7 @@
                     @include('application-manager::applications.components.edit.leaving-application')
                 @endif
                 <div class="d-flex justify-content-center mt-5">
-                    <button class="btn btn-primary" type="submit">Gửi</button>
+                    <button class="btn btn-primary" type="submit">Lưu</button>
                 </div>
             </form>
         </div>
