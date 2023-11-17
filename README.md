@@ -50,7 +50,11 @@ php artisan route:cache
 
 ## Usage
 After done the installation:
-![image](https://github.com/risky2k1/application-manager/assets/97021417/1440a734-642e-49ce-8b24-c2a702b886db)
+--index page
+![image](https://github.com/risky2k1/application-manager/assets/97021417/49a49590-9883-44d1-9eb1-96401d2b538b)
+--show page
+![image](https://github.com/risky2k1/application-manager/assets/97021417/d15930ed-6093-49be-9ed7-cda1ef241461)
+
 
 
 
