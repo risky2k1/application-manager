@@ -61,7 +61,7 @@ class ExportRequestApplicationJob implements ShouldQueue
                 trans('application-manager::vi.'.$application->type),
                 $application->user->roles->first()?->text ?? '',
                 $application->name ?? '',
-                $application->user->name ?? '',
+                $application->proponent->name ?? '',
                 $application->bank_account ?? '',
                 carbon($application->delivery_date, 'Y-m-d', 'd-m-Y') ?? '',
             ];

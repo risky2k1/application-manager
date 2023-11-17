@@ -58,7 +58,7 @@ class ExportLeavingApplicationJob implements ShouldQueue
                 trans('application-manager::vi.'.$application->type),
                 $application->user->roles->first()?->text,
                 $application->description,
-                $application->reviewers->name,
+                $application->reviewer->name,
                 carbon($application->created_at, 'Y-m-d', 'd-m-Y'),
                 $application->number_of_day_off,
             ];
