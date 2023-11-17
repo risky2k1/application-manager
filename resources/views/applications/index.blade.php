@@ -108,7 +108,9 @@
                                 <th>Lý do</th>
                                 <th>Phòng ban</th>
                                 <th>Tệp đính kèm</th>
-                                <th>Số ngày</th>
+                                @if(request()->route('type') != config('application-manager.application.default'))
+                                    <th>Số ngày</th>
+                                @endif
                                 <th>Ngày tạo</th>
                                 <th class="text-end sorting_disabled" rowspan="1" colspan="1" aria-label="Actions">Hành động</th>
                             </tr>
@@ -136,11 +138,15 @@
                                     <td>
                                         <a href="{{route('applications.download.attached.files',$application)}}">@if(!empty($application->attached_files))<i class="fa-solid fa-file"></i>@endif</a>
                                     </td>
-                                    <td>{{$application->number_of_day_off}}</td>
+                                    @if(request()->route('type') != config('application-manager.application.default'))
+                                        <td>{{$application->number_of_day_off}}</td>
+                                    @endif
                                     <td>{{carbon($application->created_at,'Y-m-d','d-m-Y')}}</td>
                                     <td class="d-flex align-items-center justify-content-end">
-                                        <a href="{{route('applications.edit',$application)}}" class="col-auto me-5" data-bs-toggle="tooltip" data-bs-placement="bottom" aria-label="Sửa"
-                                           data-bs-original-title="Sửa" data-kt-initialized="1"><i class="fa-solid fa-pen p-2"></i></a>
+                                        @if($application->isPending)
+                                            <a href="{{route('applications.edit',$application)}}" class="col-auto me-5" data-bs-toggle="tooltip" data-bs-placement="bottom" aria-label="Sửa"
+                                               data-bs-original-title="Sửa" data-kt-initialized="1"><i class="fa-solid fa-pen p-2"></i></a>
+                                        @endif
                                         <form action="{{route('applications.destroy',$application)}}" method="post" class="delete_form">
                                             @csrf
                                             @method('DELETE')
