@@ -13,7 +13,7 @@
                 required>
             <option value="">-- --</option>
             @foreach(config('application-manager.application.type.leave_application') as $reason)
-                <option value="{{$reason}}">{{trans('application-manager::vi.'.$reason)}}</option>
+                <option value="{{$reason}}" @selected(old('reason') == $reason)>{{trans('application-manager::vi.'.$reason)}}</option>
             @endforeach
         </select>
         <div class="fv-plugins-message-container invalid-feedback">@error('reason') {{$message}} @enderror</div>
@@ -33,8 +33,8 @@
                 name="is_paid_leave"
                 id="is_paid_leave">
             <option value="">-- --</option>
-            <option value="1">Có</option>
-            <option value="0">Không</option>
+            <option value="1" @selected(old('is_paid_leave' ) == '1')>Có</option>
+            <option value="0" @selected(old('is_paid_leave' ) == '0')>Không</option>
         </select>
         <!--end::Input-->
         <div class="fv-plugins-message-container invalid-feedback">@error('is_paid_leave') {{$message}} @enderror</div>
@@ -67,6 +67,60 @@
                 </tr>
                 </thead>
                 <tbody data-repeater-list="row_repeater">
+                @if(!empty(old('row_repeater')))
+                    @foreach(old('row_repeater') as $row)
+                        <tr data-repeater-item>
+                            <td>
+                                <select class="form-select @error('start_shift') is-invalid @enderror"
+                                        data-control="select2"
+                                        data-placeholder="Ca bắt đầu"
+                                        data-allow-clear="true"
+                                        data-hide-search="true"
+                                        name="start_shift">
+                                    <option value="">-- --</option>
+                                    @foreach(config('application-manager.application.shift') as $shift)
+                                        <option value="{{$shift}}" @selected($row['start_shift'] == $shift)>{{trans('application-manager::vi.'.$shift)}}</option>
+                                    @endforeach
+                                </select>
+                            </td>
+                            <td>
+                                <input type="text"
+                                       class="form-control mb-3 mb-lg-0 @error('start_date') is-invalid @enderror date-picker"
+                                       name="start_date"
+                                       placeholder="Thời gian bắt đầu"
+                                       autocomplete="off"
+                                       value="{{$row['start_date']}}"
+                                />
+                            </td>
+                            <td>
+                                <select class="form-select @error('end_shift') is-invalid @enderror"
+                                        data-control="select2"
+                                        data-placeholder="Ca kết thúc"
+                                        data-allow-clear="true"
+                                        data-hide-search="true"
+                                        name="end_shift"
+                                >
+                                    <option value="">-- --</option>
+                                    @foreach(config('application-manager.application.shift') as $shift)
+                                        <option value="{{$shift}}" @selected($row['end_shift'] == $shift)>{{trans('application-manager::vi.'.$shift)}}</option>
+                                    @endforeach
+                                </select>
+                            </td>
+                            <td>
+                                <input type="text"
+                                       class="form-control mb-3 mb-lg-0 @error('end_date') is-invalid @enderror edit-ajax date-picker"
+                                       name="end_date"
+                                       placeholder="Thời gian kết thúc"
+                                       autocomplete="off"
+                                       value="{{$row['end_date']}}"
+                                />
+                            </td>
+                            <td class="col-1">
+                                <div data-repeater-delete class="delete"><i class="fa-solid fa-trash"></i></div>
+                            </td>
+                        </tr>
+                    @endforeach
+                @endif
                 <tr data-repeater-item>
                     <td>
                         <select class="form-select @error('start_shift') is-invalid @enderror"
@@ -83,7 +137,7 @@
                     </td>
                     <td>
                         <input type="text"
-                               class="form-control mb-3 mb-lg-0 @error('start_date') is-invalid @enderror edit-ajax date-picker"
+                               class="form-control mb-3 mb-lg-0 @error('start_date') is-invalid @enderror date-picker"
                                name="start_date"
                                placeholder="Thời gian bắt đầu"
                                autocomplete="off"
@@ -131,7 +185,7 @@
         <!--end::Label-->
         <!--begin::Input-->
         <textarea name="description" id="description" cols="30" rows="10"
-                  class="form-control mb-3 mb-lg-0 @error('phone') is-invalid @enderror" required></textarea>
+                  class="form-control mb-3 mb-lg-0 @error('phone') is-invalid @enderror" required>{{old('description')}}</textarea>
         <!--end::Input-->
         <div class="fv-plugins-message-container invalid-feedback">@error('description') {{$message}} @enderror</div>
         <!--end::Input group-->
@@ -162,13 +216,12 @@
                 data-control="select2"
                 data-placeholder="Người kiểm duyệt"
                 data-allow-clear="true"
-                data-hide-search="true"
                 name="reviewer_id"
                 id="reviewer_id"
                 required>
             <option value="">-- --</option>
             @foreach($users as $reviewer)
-                <option value="{{$reviewer->id}}">{{$reviewer->name}}</option>
+                <option value="{{$reviewer->id}}" @selected(old('reviewer_id') == $reviewer->id)>{{$reviewer->name}}</option>
             @endforeach
         </select>
         <!--end::Input-->
@@ -185,13 +238,14 @@
                 data-control="select2"
                 data-placeholder="Người theo dõi"
                 data-allow-clear="true"
-                data-hide-search="true"
                 name="consider_id[]"
                 id="consider_id"
                 required>
             <option value="">-- --</option>
             @foreach($users as $consider)
-                <option value="{{$consider->id}}">{{$consider->name}}</option>
+                <option value="{{$consider->id}}"@if(!empty(old('consider_id')))
+                    @selected(in_array($consider->id,old('consider_id')))
+                        @endif>{{$consider->name}}</option>
             @endforeach
         </select>
         <!--end::Input-->
