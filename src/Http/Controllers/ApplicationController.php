@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 use Spatie\ModelStates\Exceptions\CouldNotPerformTransition;
 use Illuminate\Support\Fluent;
 use ZipArchive;
@@ -26,7 +27,7 @@ class ApplicationController extends Controller
         if (!empty($request->input('keyword'))) {
             $keyword = $request->input('keyword');
             $query->whereHas('user', function ($userQuery) use ($keyword) {
-                $userQuery->where('name', 'like', '%' . $keyword . '%');
+                $userQuery->where('name', 'like', '%' . $keyword . '%')->orWhere('code', 'like', '%' . $keyword . '%');
             });
         }
 
@@ -66,7 +67,7 @@ class ApplicationController extends Controller
 
         $application = Application::create([
             'reason' => $request->input('reason'),
-            'code' => Application::generateCode(session('company_id')),
+            'code' => Application::generateCode(session('company_id'),$request->route('type')),
             'is_paid_leave' => $request->input('is_paid_leave'),
             'description' => $request->input('description'),
             'reviewer_id' => $request->input('reviewer_id'),
@@ -76,7 +77,7 @@ class ApplicationController extends Controller
             'type' => $request->route('type'),
             'company_id' => session('company_id'),
 
-            'name' => $request->input('name'),
+            'name' => ['string', 'nullable', Rule::requiredIf($request->route('type') == config('application-manager.application.default'))],
             'money_amount' => $request->input('money_amount'),
             'bank_account' => $request->input('bank_account'),
             'delivery_time' => $request->input('delivery_time'),
@@ -148,7 +149,7 @@ class ApplicationController extends Controller
             'attached_files' => ['array', 'nullable'],
             'attached_files.*' => ['nullable', 'mimes:doc,docx,xls,pdf,xlsx,ppt,pptx,jpeg,png,gif'],
 
-            'name' => ['string', 'nullable'],
+            'name' => ['string', 'nullable', Rule::requiredIf($request->route('type') == config('application-manager.application.default'))],
             'money_amount' => ['numeric', 'min:0', 'nullable'],
             'bank_account' => ['string', 'nullable'],
             'delivery_time' => ['string', 'nullable'],

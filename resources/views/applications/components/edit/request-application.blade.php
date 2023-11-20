@@ -12,7 +12,7 @@
                 id="reason">
             <option value="">-- --</option>
             @foreach(config('application-manager.application.type.request_application') as $reason)
-                <option value="{{$reason}}" @selected($application->reason == $reason)>{{$reason}}</option>
+                <option value="{{$reason}}" @selected($application->reason == $reason)>{{trans('application-manager::vi.'.$reason)}}</option>
             @endforeach
         </select>
         <div class="fv-plugins-message-container invalid-feedback">@error('reason') {{$message}} @enderror</div>
@@ -63,7 +63,7 @@
     <div class="col-sm-6">
         <!--begin::Input group-->
         <!--begin::Label-->
-        <label class="required fw-semibold fs-6 mb-2" for="money_amount">Số tiền</label>
+        <label class="fw-semibold fs-6 mb-2" for="money_amount">Số tiền</label>
         <!--end::Label-->
         <!--begin::Input-->
         <input type="text"
@@ -82,11 +82,11 @@
     <div class="col-sm-12">
         <!--begin::Input group-->
         <!--begin::Label-->
-        <label class="required fw-semibold fs-6 mb-2" for="bank_account">Thông tin tài khoản</label>
+        <label class="fw-semibold fs-6 mb-2" for="bank_account">Thông tin tài khoản</label>
         <!--end::Label-->
         <!--begin::Input-->
         <textarea name="bank_account" id="bank_account" cols="30" rows="10" class="form-control mb-3 mb-lg-0 @error('bank_account') is-invalid @enderror"
-                  placeholder="Số tài khoản - Ngân hàng (chi nhánh) - Chủ tài khoản (nếu người nhận tiền khác người đề xuất)" required>{{$application->bank_account}}</textarea>
+                  placeholder="Số tài khoản - Ngân hàng (chi nhánh) - Chủ tài khoản (nếu người nhận tiền khác người đề xuất)">{{$application->bank_account}}</textarea>
         <!--end::Input-->
         <div class="fv-plugins-message-container invalid-feedback">@error('bank_account') {{$message}} @enderror</div>
         <!--end::Input group-->
@@ -108,7 +108,7 @@
                 id="delivery_time">
             <option value="">-- --</option>
             @foreach(config('application-manager.application.shift') as $shift)
-                <option value="{{$shift}}" @selected($application->delivery_time == $shift)>{{$shift}}</option>
+                <option value="{{$shift}}" @selected($application->delivery_time == $shift)>{{trans('application-manager::vi.'.$shift)}}</option>
             @endforeach
         </select>
         <!--end::Input-->

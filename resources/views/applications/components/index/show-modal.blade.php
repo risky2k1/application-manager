@@ -50,7 +50,7 @@
                             <div class="col-md-6 row">
                                 <div class="col-4 fw-bold">Người đề nghị:
                                 </div>
-                                <div class="col-8">{{$application->proponent->name}}</div>
+                                <div class="col-8">{{$application->proponent->name??''}}</div>
                             </div>
                             <div class="col-md-6 row">
                                 <div class="col-4 fw-bold">Ngày cần hàng:</div>

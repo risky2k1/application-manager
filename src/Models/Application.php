@@ -85,9 +85,14 @@ class Application extends Model
         );
     }
 
-    public static function generateCode($companyId): string
+    public static function generateCode(int $companyId, string $type): string
     {
-        $prefix = 'ĐT-' . str_pad($companyId, 2, '0', STR_PAD_LEFT);
+        if ($type == config('application-manager.application.default')) {
+            $applicationType = 'ĐĐN-';
+        } else {
+            $applicationType = 'ĐXN-';
+        }
+        $prefix = $applicationType.str_pad($companyId, 2, '0', STR_PAD_LEFT);
 
         $countApplications = Application::all()->count() + 1;
 
@@ -95,7 +100,7 @@ class Application extends Model
 
         $codesAvailable = Application::pluck('code')->toArray();
         do {
-            $code = $prefix . '-' . $formattedNumber;
+            $code = $prefix.'-'.$formattedNumber;
             $formattedNumber++;
         } while (in_array($code, $codesAvailable));
 
