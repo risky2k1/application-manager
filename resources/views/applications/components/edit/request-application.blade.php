@@ -66,7 +66,7 @@
         <label class="fw-semibold fs-6 mb-2" for="money_amount">Số tiền</label>
         <!--end::Label-->
         <!--begin::Input-->
-        <input type="text"
+        <input type="number"
                class="form-control mb-3 mb-lg-0 @error('money_amount') is-invalid @enderror"
                name="money_amount"
                value="{{$application->money_amount}}"
@@ -144,7 +144,7 @@
     <div class="col-sm-6">
         <!--begin::Input group-->
         <!--begin::Label-->
-        <label class="fw-semibold fs-6 mb-2" for="reviewer_id">Người kiểm duyệt</label>
+        <label class="required fw-semibold fs-6 mb-2" for="reviewer_id">Người kiểm duyệt</label>
         <!--end::Label-->
         <!--begin::Input-->
         <select class="form-select @error('reviewer_id') is-invalid @enderror"
@@ -153,7 +153,8 @@
                 data-allow-clear="true"
                 data-hide-search="true"
                 name="reviewer_id"
-                id="reviewer_id">
+                id="reviewer_id"
+                required>
             <option value="">-- --</option>
             @foreach($users as $reviewer)
                 <option value="{{$reviewer->id}}" @selected($reviewer->id == $application->reviewer_id)>{{$reviewer->name}}</option>
@@ -166,7 +167,7 @@
     <div class="col-sm-6">
         <!--begin::Input group-->
         <!--begin::Label-->
-        <label class="fw-semibold fs-6 mb-2" for="consider_id">Người theo dõi</label>
+        <label class="required fw-semibold fs-6 mb-2" for="consider_id">Người theo dõi</label>
         <!--end::Label-->
         <!--begin::Input-->
         <select class="form-select @error('consider_id') is-invalid @enderror"
@@ -175,7 +176,8 @@
                 data-allow-clear="true"
                 data-hide-search="true"
                 name="consider_id[]"
-                id="consider_id">
+                id="consider_id"
+                required>
             <option value="">-- --</option>
             @foreach($users as $consider)
                 <option value="{{$consider->id}}" @selected(in_array($consider->id, $application->considers->pluck('id')->toArray()))>{{$consider->name}}</option>

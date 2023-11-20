@@ -68,7 +68,7 @@
         <label class="fw-semibold fs-6 mb-2" for="money_amount">Số tiền</label>
         <!--end::Label-->
         <!--begin::Input-->
-        <input type="text"
+        <input type="number"
                class="form-control mb-3 mb-lg-0 @error('money_amount') is-invalid @enderror"
                name="money_amount"
                placeholder="Số tiền"

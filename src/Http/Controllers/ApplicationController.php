@@ -57,8 +57,7 @@ class ApplicationController extends Controller
             'reviewer_id' => ['required', 'string'],
             'attached_files' => ['array', 'nullable'],
             'attached_files.*' => ['nullable', 'mimes:doc,docx,xls,xlsx,pdf,ppt,pptx,jpeg,png,gif'],
-
-            'name' => ['string', 'nullable'],
+            'name' => ['string', 'nullable', Rule::requiredIf($request->route('type') == config('application-manager.application.default'))],
             'money_amount' => ['numeric', 'min:0', 'nullable'],
             'bank_account' => ['string', 'nullable'],
             'delivery_time' => ['string', 'nullable'],
@@ -77,7 +76,7 @@ class ApplicationController extends Controller
             'type' => $request->route('type'),
             'company_id' => session('company_id'),
 
-            'name' => ['string', 'nullable', Rule::requiredIf($request->route('type') == config('application-manager.application.default'))],
+            'name' => $request->input('name'),
             'money_amount' => $request->input('money_amount'),
             'bank_account' => $request->input('bank_account'),
             'delivery_time' => $request->input('delivery_time'),
@@ -222,7 +221,7 @@ class ApplicationController extends Controller
     {
         $type = $application->type;
         $application->deleteOrFail();
-
+        toastr()->success('Xoá đơn từ thành công');
         return redirect()->route('applications.index', ['type' => $type]);
     }
 
