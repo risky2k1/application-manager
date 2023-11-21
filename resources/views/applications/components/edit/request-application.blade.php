@@ -151,7 +151,6 @@
                 data-control="select2"
                 data-placeholder="Người kiểm duyệt"
                 data-allow-clear="true"
-                data-hide-search="true"
                 name="reviewer_id"
                 id="reviewer_id"
                 required>
@@ -174,7 +173,6 @@
                 data-control="select2"
                 data-placeholder="Người theo dõi"
                 data-allow-clear="true"
-                data-hide-search="true"
                 name="consider_id[]"
                 id="consider_id"
                 required>

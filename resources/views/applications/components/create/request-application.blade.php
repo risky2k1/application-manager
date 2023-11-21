@@ -7,7 +7,6 @@
                 data-control="select2"
                 data-placeholder="Loại đề xuất"
                 data-allow-clear="true"
-                data-hide-search="true"
                 name="reason"
                 id="reason"
                 required>
@@ -50,7 +49,6 @@
                 data-control="select2"
                 data-placeholder="Người đề nghị"
                 data-allow-clear="true"
-                data-hide-search="true"
                 name="proponent_id"
                 id="proponent_id" required>
             <option value="">-- --</option>
@@ -158,7 +156,6 @@
                 data-control="select2"
                 data-placeholder="Người kiểm duyệt"
                 data-allow-clear="true"
-                data-hide-search="true"
                 name="reviewer_id"
                 id="reviewer_id" required>
             <option value="">-- --</option>
@@ -180,7 +177,6 @@
                 data-control="select2"
                 data-placeholder="Người theo dõi"
                 data-allow-clear="true"
-                data-hide-search="true"
                 name="consider_id[]"
                 id="consider_id" required>
             <option value="">-- --</option>

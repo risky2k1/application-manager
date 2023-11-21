@@ -7,7 +7,6 @@
                 data-control="select2"
                 data-placeholder="Chọn Lý do"
                 data-allow-clear="true"
-                data-hide-search="true"
                 name="reason"
                 id="reason"
                 required>
@@ -49,8 +48,8 @@
                     <h5>Thời gian nghỉ</h5>
                 </div>
                 <div class="col-auto d-flex">
-                    <button type="button" data-repeater-create class="justify-content-center btn_add">
-                        <i class="fa-solid fa-plus text-white fa-3x"></i>
+                    <button type="button" data-repeater-create class="justify-content-center border border-1" style="background-color: #F15A22">
+                        <i class="fa-solid fa-plus text-white"></i>
                     </button>
                 </div>
             </div>
