@@ -28,12 +28,6 @@ php artisan vendor:publish --provider="Risky2k1\ApplicationManager\ApplicationMa
 php artisan migrate
 ```
 
-### (Optional) Cache Routes:
-If you get errors about routes missing, you can try:
-```bash
-php artisan route:cache
-```
-
 ### Add to side bar:
 
 ```bash
