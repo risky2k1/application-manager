@@ -46,10 +46,12 @@ php artisan migrate
 
 ## Usage
 After done the installation:
---index page
+###index page
 ![image](https://github.com/risky2k1/application-manager/assets/97021417/49a49590-9883-44d1-9eb1-96401d2b538b)
---show page
+###show page
 ![image](https://github.com/risky2k1/application-manager/assets/97021417/d15930ed-6093-49be-9ed7-cda1ef241461)
+###create page
+![image](https://github.com/risky2k1/application-manager/assets/97021417/25605c2c-3235-4ca5-89a0-313c2d5e32e8)
 
 
 
