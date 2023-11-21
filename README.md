@@ -13,6 +13,8 @@ You can publish the package's migrations and config using the following Artisan 
 
 ```bash
 php artisan vendor:publish --provider="Risky2k1\ApplicationManager\ApplicationManagerServiceProvider" --tag="migrations"
+```
+```bash
 php artisan vendor:publish --provider="Risky2k1\ApplicationManager\ApplicationManagerServiceProvider" --tag="config"
 ```
 
