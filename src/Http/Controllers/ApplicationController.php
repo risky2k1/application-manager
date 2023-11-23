@@ -56,7 +56,7 @@ class ApplicationController extends Controller
             'description' => ['string', 'nullable'],
             'reviewer_id' => ['required', 'string'],
             'attached_files' => ['array', 'nullable'],
-            'attached_files.*' => ['nullable', 'mimes:doc,docx,xls,xlsx,pdf,ppt,pptx,jpeg,png,gif'],
+            'attached_files.*' => ['nullable', 'mimes:doc,docx,xls,xlsx,pdf,ppt,pptx,jpeg,png,gif', 'max:5120'],
             'name' => ['string', 'nullable', Rule::requiredIf($request->route('type') == config('application-manager.application.default'))],
             'money_amount' => ['numeric', 'min:0', 'nullable'],
             'bank_account' => ['string', 'nullable'],
@@ -146,7 +146,7 @@ class ApplicationController extends Controller
             'description' => ['string', 'nullable'],
             'reviewer_id' => ['required', 'string'],
             'attached_files' => ['array', 'nullable'],
-            'attached_files.*' => ['nullable', 'mimes:doc,docx,xls,pdf,xlsx,ppt,pptx,jpeg,png,gif'],
+            'attached_files.*' => ['nullable', 'mimes:doc,docx,xls,pdf,xlsx,ppt,pptx,jpeg,png,gif', 'max:5120'],
 
             'name' => ['string', 'nullable', Rule::requiredIf($request->route('type') == config('application-manager.application.default'))],
             'money_amount' => ['numeric', 'min:0', 'nullable'],
