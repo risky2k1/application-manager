@@ -209,7 +209,7 @@ class ApplicationController extends Controller
         if (!empty($request->consider_id)) {
             foreach ($request->consider_id as $considerId) {
                 $consider = User::findOrFail($considerId);
-                $application->considers()->toggle($consider);
+                $application->considers()->syncWithoutDetaching($consider);
             }
         }
         toastr()->success('Cập nhật đơn từ thành công');
