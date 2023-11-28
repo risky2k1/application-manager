@@ -3,6 +3,7 @@
 namespace Risky2k1\ApplicationManager\Models;
 
 use App\Models\User;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Risky2k1\ApplicationManager\Models\States\Application\ApplicationState;
 use Risky2k1\ApplicationManager\Models\States\Application\Pending;
 use Carbon\Carbon;
@@ -18,6 +19,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 class Application extends Model
 {
     use HasFactory;
+    use SoftDeletes;
 
     protected $fillable = [
         'user_id',

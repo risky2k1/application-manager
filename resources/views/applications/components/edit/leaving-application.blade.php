@@ -192,6 +192,7 @@
                 data-allow-clear="true"
                 name="consider_id[]"
                 id="consider_id"
+                multiple="multiple"
                 required>
             <option value="">-- --</option>
             @foreach($users as $consider)

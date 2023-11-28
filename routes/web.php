@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Risky2k1\ApplicationManager\Http\Controllers\Ajax\AjaxApplicationController;
 use Risky2k1\ApplicationManager\Http\Controllers\ApplicationController;
 
 /*
@@ -25,3 +26,7 @@ Route::patch('/{application}', [ApplicationController::class, 'update'])->name('
 Route::delete('/{application}', [ApplicationController::class, 'destroy'])->name('applications.destroy');
 Route::patch('/{application}/update-state', [ApplicationController::class, 'updateApplicationState'])->name('applications.update.state');
 Route::get('/{application}/download-attached-files',[ApplicationController::class,'downloadAttachedFiles'])->name('applications.download.attached.files');
+
+Route::prefix('ajax')->group(function (){
+    Route::delete('/selected-applications', [AjaxApplicationController::class, 'deleteApplications'])->name('applications.destroy.selected');
+});

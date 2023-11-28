@@ -178,6 +178,7 @@
                 data-placeholder="Người theo dõi"
                 data-allow-clear="true"
                 name="consider_id[]"
+                multiple="multiple"
                 id="consider_id" required>
             <option value="">-- --</option>
             @foreach($users as $consider)
