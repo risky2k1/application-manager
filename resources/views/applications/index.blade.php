@@ -1,5 +1,20 @@
 @extends('layouts.main')
 
+@section('stylesheets')
+    <style>
+        .application-state-label {
+            padding: 5px;
+            border: 1px solid #ccc;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .application-state-label:hover {
+            background-color: #50cd89;
+        }
+    </style>
+@endsection
+
 @section('content')
     <div class="card">
         <div class="card-header">
