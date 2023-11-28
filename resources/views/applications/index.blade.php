@@ -110,6 +110,8 @@
                                 <th>Tệp đính kèm</th>
                                 @if(request()->route('type') != config('application-manager.application.default'))
                                     <th>Số ngày</th>
+                                @else
+                                    <th>Số tiền</th>
                                 @endif
                                 <th>Ngày tạo</th>
                                 <th class="text-end sorting_disabled" rowspan="1" colspan="1" aria-label="Actions">Hành động</th>
@@ -143,6 +145,8 @@
                                     </td>
                                     @if(request()->route('type') != config('application-manager.application.default'))
                                         <td>{{$application->number_of_day_off}}</td>
+                                    @else
+                                        <td>{{number_format($application->money_amount)}}</td>
                                     @endif
                                     <td>{{carbon($application->created_at,'Y-m-d','d-m-Y')}}</td>
                                     <td class="d-flex align-items-center justify-content-end">
