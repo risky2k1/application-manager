@@ -1,4 +1,4 @@
-<div class="modal fade" tabindex="-1" id="show-modal">
+<div class="modal fade" tabindex="-1" id="{{'show-modal-'.$application->code}}">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">
