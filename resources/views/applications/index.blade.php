@@ -87,6 +87,11 @@
             </form>
             <div class="card-toolbar">
                 <!--begin::Toolbar-->
+
+                <button class="btn btn-sm btn-danger me-5" style="display: none" id="delete_selected_applications">
+                    Xoá <span id="selected_application"></span> đơn đã chọn
+                </button>
+
                 <a href="{{route('applications.export',['type'=>request()->route('type'),'state'=>request('state')])}}" class="btn btn-sm btn-light btn-active-light-primary me-5">
                     Xuất<i class="ms-2 fa-solid fa-file-export"></i>
                 </a>
@@ -116,7 +121,12 @@
                             <thead>
                             <!--begin::Table row-->
                             <tr class="text-center fw-bold fs-7 text-uppercase gs-0">
-                                <th class="text-start">STT</th>
+                                <th>
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input border border-black application-select-all-checkbox">
+                                    </div>
+                                </th>
+                                <th>STT</th>
                                 <th>Người tạo</th>
                                 <th>Mã đơn</th>
                                 <th>Trạng thái</th>
@@ -139,24 +149,41 @@
                             @foreach($applications as $application)
                                 <tr class="odd text-gray-800">
                                     <td>
+                                        <div class="form-check" data-id="{{$application->id}}">
+                                            <input type="checkbox" class="form-check-input border border-black application-checkbox">
+                                        </div>
+                                    </td>
+                                    <td>
                                         <div>{{$loop->increment}}</div>
                                     </td>
                                     <td>
                                         <a href="{{route('users.show',$application->user)}}" class="mb-1">{{$application->user->name}}</a>
                                     </td>
-                                    <td class="text-primary" data-bs-toggle="modal" data-bs-target="{{'show-modal-'.$application->code}}">{{$application->code}}</td>
+                                    <td class="text-primary" data-bs-toggle="modal" data-bs-target="{{'#show-modal-'.$application->code}}">{{$application->code}}</td>
                                     <td>
                                         <label class="{{$application->state->class()}} application-state-label"
-                                               @if($application->isPending && auth()->id() == $application->reviewer->id)data-bs-toggle="modal" data-bs-target="#state_modal"
+                                               @if($application->isPending && auth()->id() == $application->reviewer->id)
+                                                   data-bs-toggle="modal"
+                                               data-bs-target="#state_modal"
                                                data-id="{{$application->id}}"
-                                               data-url="{{route('applications.update.state',$application)}}"@endif
-                                        >{{$application->state->text()}}</label></td>
+                                               data-url="{{route('applications.update.state',$application)}}"
+                                               data-bs-toggle="tooltip"
+                                               data-bs-placement="top"
+                                               title="Tải về tệp đính kèm"
+                                                @endif
+                                        >
+                                            {{$application->state->text()}}</label></td>
                                     <td>{{trans('application-manager::vi.'.$application->reason)}}</td>
                                     <td>{{$application->user->roles->first()?->text}}</td>
                                     <td>
-                                        <a href="{{route('applications.download.attached.files',$application)}}">@if(!empty($application->attached_files))
+                                        <a href="{{route('applications.download.attached.files',$application)}}"
+                                           data-bs-toggle="tooltip"
+                                           data-bs-placement="top"
+                                           title="Tải về tệp đính kèm">
+                                            @if(!empty($application->attached_files))
                                                 <i class="fa-solid fa-file"></i>
-                                            @endif</a>
+                                            @endif
+                                        </a>
                                     </td>
                                     @if(request()->route('type') != config('application-manager.application.default'))
                                         <td>{{$application->number_of_day_off}}</td>
@@ -166,14 +193,13 @@
                                     <td>{{carbon($application->created_at,'Y-m-d','d-m-Y')}}</td>
                                     <td class="d-flex align-items-center justify-content-end">
                                         @if($application->isPending)
-                                            <a href="{{route('applications.edit',$application)}}" class="col-auto me-5" data-bs-toggle="tooltip" data-bs-placement="bottom" aria-label="Sửa"
-                                               data-bs-original-title="Sửa" data-kt-initialized="1"><i class="fa-solid fa-pen p-2"></i></a>
+                                            <a href="{{route('applications.edit',$application)}}" class="btn btn-sm btn-warning me-5">Sửa</a>
                                         @endif
                                         <form action="{{route('applications.destroy',$application)}}" method="post" class="delete_form">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="button" class="border border-white delete_button" data-delete="Đơn từ">
-                                                <i class="fa-solid fa-trash"></i>
+                                            <button type="button" class="btn btn-sm btn-danger delete_button" data-delete="Đơn từ">
+                                                Xoá
                                             </button>
                                         </form>
                                     </td>
