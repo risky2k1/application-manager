@@ -20,7 +20,6 @@ return new class extends Migration {
             $table->timestamps();
         });
         Schema::table('applications', function (Blueprint $table) {
-            $table->foreignId('category_id')->constrained('application_categories');
             $table->softDeletes();
         });
 
