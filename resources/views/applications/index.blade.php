@@ -29,13 +29,17 @@
             <!--begin::Navs-->
             <div class="d-flex overflow-auto">
                 <ul class="nav nav-stretch nav-line-tabs nav-line-tabs-2x border-transparent fs-5 fw-semibold flex-nowrap">
-                    @foreach(config('application-manager.application.type') as $type=>$value)
+                    @foreach($categories as $category)
                         <!--begin::Nav item-->
                         <li class="nav-item">
                             <a class="nav-link text-active-primary me-6
-                            @if(request()->route('type')==$type) active @elseif(!request()->route('type') && $type==config('application-manager.application.default')) active @endif"
-                               href="{{route('applications.index',['type'=>$type])}}">
-                                @switch($type)
+                            @if(request()->route('type')==$category->name)
+                                active
+                            @elseif(!request()->route('type') && $category->name==config('application-manager.application.default'))
+                                active
+                            @endif"
+                               href="{{route('applications.index',['type'=>$category->name])}}">
+                                @switch($category->name)
                                     @case(config('application-manager.application.default'))
                                         Đơn đề nghị
                                         @break

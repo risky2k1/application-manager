@@ -5,6 +5,7 @@ namespace Risky2k1\ApplicationManager\Http\Controllers;
 use Risky2k1\ApplicationManager\Jobs\ExportLeavingApplicationJob;
 use Risky2k1\ApplicationManager\Jobs\ExportRequestApplicationJob;
 use Risky2k1\ApplicationManager\Models\Application;
+use Risky2k1\ApplicationManager\Models\ApplicationCategory;
 use Risky2k1\ApplicationManager\Models\States\Application\Pending;
 use Risky2k1\ApplicationManager\Models\States\Application\Approved;
 use Risky2k1\ApplicationManager\Models\States\Application\Declined;
@@ -41,13 +42,19 @@ class ApplicationController extends Controller
 
         $applications = $query->where('type', $type)->latest()->paginate()->withQueryString();
 
-        return view('application-manager::applications.index', compact('applications'));
+        $categories = ApplicationCategory::whereNull('parent_id')->get();
+
+        return view('application-manager::applications.index', compact('applications', 'categories'));
     }
 
     public function create()
     {
-        $users = User::all();
-        return view('application-manager::applications.create', compact('users'));
+        $users = User::where('is_active', true)->get();
+
+        $requestApplicationReasons = ApplicationCategory::where('parent_id', 1)->get();
+        $leavingApplicationReasons = ApplicationCategory::where('parent_id', 6)->get();
+
+        return view('application-manager::applications.create', compact('users', 'requestApplicationReasons', 'leavingApplicationReasons'));
     }
 
     public function store(Request $request)
@@ -135,9 +142,13 @@ class ApplicationController extends Controller
 
     public function edit(Request $request, Application $application)
     {
-        $users = User::all();
+        $users = User::where('is_active', true)->get();
+
+        $requestApplicationReasons = ApplicationCategory::where('parent_id', 1)->get();
+        $leavingApplicationReasons = ApplicationCategory::where('parent_id', 6)->get();
+
         $type = $application->type;
-        return view('application-manager::applications.edit', compact('application', 'type', 'users'));
+        return view('application-manager::applications.edit', compact('application', 'type', 'users', 'requestApplicationReasons', 'leavingApplicationReasons'));
     }
 
     public function update(Request $request, Application $application)

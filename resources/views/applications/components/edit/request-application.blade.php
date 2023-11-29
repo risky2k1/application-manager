@@ -11,8 +11,8 @@
                 name="reason"
                 id="reason">
             <option value="">-- --</option>
-            @foreach(config('application-manager.application.type.request_application') as $reason)
-                <option value="{{$reason}}" @selected($application->reason == $reason)>{{trans('application-manager::vi.'.$reason)}}</option>
+            @foreach($requestApplicationReasons as $reason)
+                <option value="{{$reason->name}}" @selected($application->reason == $reason->name)>{{trans('application-manager::vi.'.$reason->name)}}</option>
             @endforeach
         </select>
         <div class="fv-plugins-message-container invalid-feedback">@error('reason') {{$message}} @enderror</div>
