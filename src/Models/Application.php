@@ -96,11 +96,11 @@ class Application extends Model
         }
         $prefix = $applicationType.str_pad($companyId, 2, '0', STR_PAD_LEFT);
 
-        $countApplications = Application::all()->count() + 1;
+        $countApplications = Application::withTrashed()->get()->count() + 1;
 
-        $formattedNumber = sprintf('%05d', $countApplications);
+        $formattedNumber = str_pad($countApplications, 5, '0', STR_PAD_LEFT);
 
-        $codesAvailable = Application::pluck('code')->toArray();
+        $codesAvailable = Application::withTrashed()->pluck('code')->toArray();
         do {
             $code = $prefix.'-'.$formattedNumber;
             $formattedNumber++;
