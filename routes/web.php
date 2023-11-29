@@ -25,8 +25,10 @@ Route::get('/{application}/edit', [ApplicationController::class, 'edit'])->name(
 Route::patch('/{application}', [ApplicationController::class, 'update'])->name('applications.update');
 Route::delete('/{application}', [ApplicationController::class, 'destroy'])->name('applications.destroy');
 Route::patch('/{application}/update-state', [ApplicationController::class, 'updateApplicationState'])->name('applications.update.state');
-Route::get('/{application}/download-attached-files',[ApplicationController::class,'downloadAttachedFiles'])->name('applications.download.attached.files');
+Route::get('/{application}/download-attached-files', [ApplicationController::class, 'downloadAttachedFiles'])->name('applications.download.attached.files');
+Route::get('/{application}/restore', [ApplicationController::class, 'restore'])->name('applications.restore')->withTrashed();
 
-Route::prefix('ajax')->group(function (){
+Route::prefix('ajax')->group(function () {
     Route::delete('/selected-applications', [AjaxApplicationController::class, 'deleteApplications'])->name('applications.destroy.selected');
+    Route::get('/restore-applications', [AjaxApplicationController::class, 'restoreApplications'])->name('applications.restore.selected');
 });

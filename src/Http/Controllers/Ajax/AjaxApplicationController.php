@@ -20,4 +20,14 @@ class AjaxApplicationController extends Controller
             'success' => 'Xoá thành công',
         ]);
     }
+
+    public function restoreApplications(Request $request)
+    {
+        $selectedApplicationIds = $request->input('selected_applications_id');
+        Application::whereIn('id', $selectedApplicationIds)->restore();
+
+        return response()->json([
+            'success' => 'Khôi phục thành công',
+        ]);
+    }
 }

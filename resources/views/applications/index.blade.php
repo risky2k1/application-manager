@@ -73,6 +73,8 @@
                                 <option value="pending" @selected(request()->input('state') == 'pending')>Chờ duyệt</option>
                                 <option value="approved" @selected(request()->input('state') == 'approved')>Đã duyệt</option>
                                 <option value="declined" @selected(request()->input('state') == 'declined')>Không duyệt</option>
+                                <option value="deleted" @selected(request()->input('state') == 'deleted')>Đã xoá</option>
+
                             </select>
                         </div>
                     </div>
@@ -89,7 +91,11 @@
                 <!--begin::Toolbar-->
 
                 <button class="btn btn-sm btn-danger me-5" style="display: none" id="delete_selected_applications">
-                    Xoá <span id="selected_application"></span> đơn đã chọn
+                    Xoá <span class="selected-application"></span> đơn đã chọn
+                </button>
+
+                <button class="btn btn-sm btn-danger me-5" style="display: none" id="restore_selected_applications">
+                    Khôi phục <span class="selected-application"></span> đơn đã chọn
                 </button>
 
                 <a href="{{route('applications.export',['type'=>request()->route('type'),'state'=>request('state')])}}" class="btn btn-sm btn-light btn-active-light-primary me-5">
@@ -147,10 +153,10 @@
                             <!--begin::Table body-->
                             <tbody class="text-center fw-semibold text-gray-600">
                             @foreach($applications as $application)
-                                <tr class="odd text-gray-800">
+                                <tr class="odd text-gray-800" id="{{'application_'.$application->id}}">
                                     <td>
                                         <div class="form-check" data-id="{{$application->id}}">
-                                            <input type="checkbox" class="form-check-input border border-black application-checkbox">
+                                            <input type="checkbox" class="form-check-input border border-black application-checkbox" data-deleted="{{$application->trashed()}}">
                                         </div>
                                     </td>
                                     <td>
@@ -192,16 +198,21 @@
                                     @endif
                                     <td>{{carbon($application->created_at,'Y-m-d','d-m-Y')}}</td>
                                     <td class="d-flex align-items-center justify-content-end">
-                                        @if($application->isPending)
-                                            <a href="{{route('applications.edit',$application)}}" class="btn btn-sm btn-warning me-5">Sửa</a>
+                                        @if($application->trashed())
+                                            <a href="{{route('applications.restore',$application)}}" class="btn btn-sm btn-primary">Khôi phục</a>
+                                        @else
+                                            @if($application->isPending)
+                                                <a href="{{route('applications.edit',$application)}}" class="btn btn-sm btn-warning me-5">Sửa</a>
+                                            @endif
+                                            <form action="{{route('applications.destroy',$application)}}" method="post" class="delete_form">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="button" class="btn btn-sm btn-danger delete_button" data-delete="Đơn từ">
+                                                    Xoá
+                                                </button>
+                                            </form>
                                         @endif
-                                        <form action="{{route('applications.destroy',$application)}}" method="post" class="delete_form">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="button" class="btn btn-sm btn-danger delete_button" data-delete="Đơn từ">
-                                                Xoá
-                                            </button>
-                                        </form>
+
                                     </td>
                                 </tr>
                                 @include('application-manager::applications.components.index.show-modal',$application)

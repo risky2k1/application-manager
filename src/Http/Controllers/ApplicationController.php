@@ -27,12 +27,16 @@ class ApplicationController extends Controller
         if (!empty($request->input('keyword'))) {
             $keyword = $request->input('keyword');
             $query->whereHas('user', function ($userQuery) use ($keyword) {
-                $userQuery->where('name', 'like', '%' . $keyword . '%')->orWhere('code', 'like', '%' . $keyword . '%');
+                $userQuery->where('name', 'like', '%'.$keyword.'%')->orWhere('code', 'like', '%'.$keyword.'%');
             });
         }
 
-        if (!empty($request->input('state')) && $request->input('state') !== 'all') {
-            $query->where('state', $request->input('state'));
+        if (!empty($request->input('state'))) {
+            if ($request->input('state') === 'deleted') {
+                $query->onlyTrashed();
+            } elseif ($request->input('state') !== 'all') {
+                $query->where('state', $request->input('state'));
+            }
         }
 
         $applications = $query->where('type', $type)->latest()->paginate()->withQueryString();
@@ -66,7 +70,7 @@ class ApplicationController extends Controller
 
         $application = Application::create([
             'reason' => $request->input('reason'),
-            'code' => Application::generateCode(session('company_id'),$request->route('type')),
+            'code' => Application::generateCode(session('company_id'), $request->route('type')),
             'is_paid_leave' => $request->input('is_paid_leave'),
             'description' => $request->input('description'),
             'reviewer_id' => $request->input('reviewer_id'),
@@ -87,7 +91,7 @@ class ApplicationController extends Controller
             $attachedFiles = [];
 
             foreach ($request->attached_files as $file) {
-                $attachedFile = Storage::disk('public')->putFileAs('application_attached_files/' . $application->user_id . '/' . $application->id, $file, $file->getClientOriginalName());
+                $attachedFile = Storage::disk('public')->putFileAs('application_attached_files/'.$application->user_id.'/'.$application->id, $file, $file->getClientOriginalName());
                 $attachedFiles[] = $attachedFile;
             }
             $application->update([
@@ -160,7 +164,7 @@ class ApplicationController extends Controller
             'is_paid_leave' => $request->input('is_paid_leave'),
             'description' => $request->input('description'),
             'reviewer_id' => $request->input('reviewer_id'),
-            'proponent_id' =>  $request->input('proponent_id'),
+            'proponent_id' => $request->input('proponent_id'),
 
             'name' => $request->input('name'),
             'money_amount' => $request->input('money_amount'),
@@ -173,7 +177,7 @@ class ApplicationController extends Controller
             $attachedFiles = [];
 
             foreach ($request->attached_files as $file) {
-                $attachedFile = Storage::disk('public')->putFileAs('application_attached_files/' . $application->user_id . '/' . $application->id, $file, $file->getClientOriginalName());
+                $attachedFile = Storage::disk('public')->putFileAs('application_attached_files/'.$application->user_id.'/'.$application->id, $file, $file->getClientOriginalName());
                 $attachedFiles[] = $attachedFile;
             }
             $application->update([
@@ -267,8 +271,8 @@ class ApplicationController extends Controller
 
     public function downloadAttachedFiles(Application $application)
     {
-        $zipFileName = 'Tệp đính kèm của đơn từ ' . $application->code . '.zip';
-        $zipFilePath = storage_path("app/public/application_attached_files/" . $application->user->id . "/" . $application->id . "/" . $zipFileName);
+        $zipFileName = 'Tệp đính kèm của đơn từ '.$application->code.'.zip';
+        $zipFilePath = storage_path("app/public/application_attached_files/".$application->user->id."/".$application->id."/".$zipFileName);
         $zip = new \ZipArchive();
         if ($zip->open($zipFilePath, ZipArchive::CREATE) === true) {
             $folderPath = "public/application_attached_files/{$application->user->id}/{$application->id}";
@@ -277,12 +281,19 @@ class ApplicationController extends Controller
             }
 
             foreach ($files as $file) {
-                $relativePath = str_replace($folderPath . '/', '', $file);
-                $zip->addFile(storage_path('app/' . $file), $relativePath);
+                $relativePath = str_replace($folderPath.'/', '', $file);
+                $zip->addFile(storage_path('app/'.$file), $relativePath);
             }
         }
         $zip->close();
 
         return response()->download($zipFilePath, $zipFileName)->deleteFileAfterSend(true);
+    }
+
+    public function restore(Application $application)
+    {
+        $application->restore();
+        toastr()->success('Khôi phục thành công');
+        return redirect()->route('applications.index', ['type' => $application->type]);
     }
 }
