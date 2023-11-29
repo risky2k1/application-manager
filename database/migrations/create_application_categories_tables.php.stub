@@ -3,17 +3,63 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Risky2k1\ApplicationManager\Models\ApplicationCategory;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
     public function up(): void
     {
+        Schema::create('application_categories', function (Blueprint $table) {
+            $table->id();
+
+            $table->string('name');
+            $table->foreignId('parent_id')->nullable()->constrained('application_categories');
+
+            $table->timestamps();
+        });
         Schema::table('applications', function (Blueprint $table) {
+            $table->foreignId('category_id')->constrained('application_categories');
             $table->softDeletes();
         });
+
+        $types = [
+            'request_application' => [
+                'asset_transfer', // Bàn giao tài sản
+                'payment', // Thanh toán
+                'purchase', // Mua hàng
+                'advance', //Tạm ứng
+            ],
+            'leave_application' => [
+                'sick_leave',   //nghỉ ốm
+                'maternity_leave', //Nghỉ thai sản
+                'unpaid_leave', //Nghỉ không lương
+                'annual_leave', //Nghỉ phép năm
+                'other_leave', //Nghỉ khác
+                'child_sick_leave', //Nghỉ con ốm
+                'recovery_leave_after_illness', //nghỉ dưỡng sức sau ốm đau
+                'conference_and_training_leave',   //nghỉ hội nghị, học tập
+                'recovery_leave_after_maternity', // nghỉ dưỡng sức sau thai sản
+                'recovery_leave_after_treatment_or_injury', //nghỉ dưỡng sức sau điều trị thương tật, tai nạn
+                'compensatory_leave', //nghỉ bù
+                'accident_leave', //nghỉ tai nạn
+                'bereavement_leave', //nghỉ hiếu hỷ
+                'customer_meeting', //gặp khách hàng
+            ],
+        ];
+
+        foreach ($types as $type=>$reason){
+            $category = ApplicationCategory::create([
+                'name' => $type,
+            ]);
+            foreach ($reason as $item){
+                ApplicationCategory::create([
+                    'name'=>$item,
+                    'parent_id' => $category->id,
+                ]);
+            }
+        }
     }
 
     /**
@@ -24,5 +70,6 @@ return new class extends Migration
         Schema::table('applications', function (Blueprint $table) {
             $table->dropSoftDeletes();
         });
+        Schema::dropIfExists('application_categories');
     }
 };
