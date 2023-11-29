@@ -232,7 +232,7 @@ class ApplicationController extends Controller
     public function updateApplicationState(Request $request)
     {
         $application = Application::findOrFail($request->application_id);
-        if (!empty($request->state) && $application->isPending && $application->reviewer_id == auth()->id()) {
+        if (!empty($request->state) && $application->isPending && $application->reviewer_id == auth()->id() && !$application->trashed()) {
             try {
                 switch ($request->state) {
                     case ('declined'):

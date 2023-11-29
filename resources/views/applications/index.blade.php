@@ -168,7 +168,7 @@
                                     <td class="text-primary" data-bs-toggle="modal" data-bs-target="{{'#show-modal-'.$application->code}}">{{$application->code}}</td>
                                     <td>
                                         <label class="{{$application->state->class()}} application-state-label"
-                                               @if($application->isPending && auth()->id() == $application->reviewer->id)
+                                               @if($application->isPending && auth()->id() == $application->reviewer->id && !$application->trashed())
                                                    data-bs-toggle="modal"
                                                data-bs-target="#state_modal"
                                                data-id="{{$application->id}}"
