@@ -37,7 +37,11 @@ class ExportRequestApplicationJob implements ShouldQueue
      */
     public function handle()
     {
-        $query = Application::with('user')->where('type', $this->dataToDispatch['type']);
+        $type = $this->dataToDispatch['type'];
+
+        $query = Application::with('user', 'category')->whereHas('category', function ($categoryQuery) use ($type) {
+            $categoryQuery->where('name', $type);
+        });
 
         if (isset($this->dataToDispatch['state'])) {
             $query->where('state', $this->dataToDispatch['state']);
@@ -57,8 +61,8 @@ class ExportRequestApplicationJob implements ShouldQueue
                 $application->code ?? '',
                 $application->user->name ?? '',
                 $application->state->text() ?? '',
-                trans('application-manager::vi.'.$application->reason),
-                trans('application-manager::vi.'.$application->type),
+                $application->reason,
+                trans('application-manager::vi.'.$application->category->name),
                 $application->user->roles->first()?->text ?? '',
                 $application->name ?? '',
                 $application->proponent->name ?? '',

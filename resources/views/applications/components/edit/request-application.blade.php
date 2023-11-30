@@ -3,18 +3,8 @@
         <label class="fs-5 form-label mb-2" for="reason">
             <span class="required">Loại đề xuất</span>
         </label>
-        <select class="form-select @error('reason') is-invalid @enderror"
-                data-control="select2"
-                data-placeholder="Chọn Lý do"
-                data-allow-clear="true"
-                data-hide-search="true"
-                name="reason"
-                id="reason">
-            <option value="">-- --</option>
-            @foreach($requestApplicationReasons as $reason)
-                <option value="{{$reason->name}}" @selected($application->reason == $reason->name)>{{trans('application-manager::vi.'.$reason->name)}}</option>
-            @endforeach
-        </select>
+        <textarea name="reason" id="reason" cols="10" rows="1"
+                  class="form-control mb-3 mb-lg-0 @error('reason') is-invalid @enderror" placeholder="Lý do viết đơn">{{$application->reason}}</textarea>
         <div class="fv-plugins-message-container invalid-feedback">@error('reason') {{$message}} @enderror</div>
         <!--end::Input group-->
     </div>
@@ -121,7 +111,8 @@
         <label class="fw-semibold fs-6 mb-2" for="delivery_date">Ngày cần hàng</label>
         <!--end::Label-->
         <!--begin::Input-->
-        <input type="text" name="delivery_date" id="delivery_date" value="{{$application->delivery_date}}" class="form-control date-picker mb-3 mb-lg-0 @error('delivery_date') is-invalid @enderror" aria-autocomplete="none">
+        <input type="text" name="delivery_date" id="delivery_date" value="{{$application->delivery_date}}" class="form-control date-picker mb-3 mb-lg-0 @error('delivery_date') is-invalid @enderror"
+               aria-autocomplete="none">
         <!--end::Input-->
         <div class="fv-plugins-message-container invalid-feedback">@error('delivery_date') {{$message}} @enderror</div>
         <!--end::Input group-->

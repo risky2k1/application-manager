@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Schema;
 use Risky2k1\ApplicationManager\Models\Application;
 use Risky2k1\ApplicationManager\Models\ApplicationCategory;
@@ -20,10 +21,19 @@ return new class extends Migration {
         $applications = Application::whereNotNull('type')->get();
 
         foreach ($applications as $application) {
-            $category = ApplicationCategory::where('name', $application->type)->first();
-            $application->update([
-                'category_id' => $category->id,
-            ]);
+            try {
+                $category = ApplicationCategory::where('name', $application->type)->first();
+
+                if ($category && Application::where('type', $category->name)->exists()) {
+                    $application->update([
+                        'category_id' => $category->id,
+                    ]);
+                } else {
+                    Log::info("Không tìm thấy category hoặc không có application tương ứng cho type: {$application->type}");
+                }
+            } catch (\Exception $e) {
+                Log::error("Có lỗi khi cập nhật application: {$e->getMessage()}");
+            }
         }
         Schema::table('applications', function (Blueprint $table) {
             $table->dropColumn('type');

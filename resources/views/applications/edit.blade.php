@@ -12,7 +12,7 @@
             <form action="{{route('applications.update',$application)}}" method="post" enctype="multipart/form-data">
                 @csrf
                 @method('PATCH')
-                @if($application->type == config('application-manager.application.default') )
+                @if($application->category->name == config('application-manager.application.default') )
                     @include('application-manager::applications.components.edit.request-application')
                 @else
                     @include('application-manager::applications.components.edit.leaving-application')

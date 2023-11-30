@@ -183,7 +183,7 @@
                                                 @endif
                                         >
                                             {{$application->state->text()}}</label></td>
-                                    <td>{{trans('application-manager::vi.'.$application->reason)}}</td>
+                                    <td class="text-truncate d-inline-block" style="max-width: 150px;">{{$application->reason}}</td>
                                     <td>{{$application->user->roles->first()?->text}}</td>
                                     <td>
                                         <a href="{{route('applications.download.attached.files',$application)}}"

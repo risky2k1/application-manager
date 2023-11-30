@@ -4,6 +4,7 @@ namespace Risky2k1\ApplicationManager\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Risky2k1\ApplicationManager\Models\ApplicationCategory;
 use Symfony\Component\HttpFoundation\Response;
 
 class ValidateApplicationTypeMiddleware
@@ -15,7 +16,9 @@ class ValidateApplicationTypeMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (!array_key_exists($request->route('type'), config('application-manager.application.type'))) {
+        $types = ApplicationCategory::pluck('name')->toArray();
+
+        if (!in_array($request->route('type'), $types)) {
             abort(404);
         }
         return $next($request);

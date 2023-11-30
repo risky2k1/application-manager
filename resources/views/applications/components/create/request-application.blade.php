@@ -1,20 +1,10 @@
 <div class="row">
     <div class="col-sm-6">
         <label class="fs-5 form-label mb-2" for="reason">
-            <span class="required">Loại đề xuất</span>
+            <span class="required">Lý do</span>
         </label>
-        <select class="form-select @error('reason') is-invalid @enderror"
-                data-control="select2"
-                data-placeholder="Loại đề xuất"
-                data-allow-clear="true"
-                name="reason"
-                id="reason"
-                required>
-            <option value="">-- --</option>
-            @foreach($requestApplicationReasons as $reason)
-                <option value="{{$reason->name}}" @selected(old('reason') == $reason->name)>{{trans('application-manager::vi.'.$reason->name)}}</option>
-            @endforeach
-        </select>
+        <textarea name="reason" id="reason" cols="10" rows="1"
+                  class="form-control mb-3 mb-lg-0 @error('reason') is-invalid @enderror" placeholder="Lý do viết đơn">{{old('reason')}}</textarea>
         <div class="fv-plugins-message-container invalid-feedback">@error('reason') {{$message}} @enderror</div>
         <!--end::Input group-->
     </div>
