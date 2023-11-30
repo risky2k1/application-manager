@@ -9,13 +9,14 @@
         </div>
         <!--end::Card header-->
         <div class="card-body">
-            <form action="{{route('applications.store',['type'=>request()->route('type')])}}" method="post" enctype="multipart/form-data">
+            <form action="{{route('applications.store',['type'=>$type])}}" method="post" enctype="multipart/form-data">
                 @csrf
-                @if(request()->route('type') == config('application-manager.application.default') )
-                    @include('application-manager::applications.components.create.request-application')
-                @else
-                    @include('application-manager::applications.components.create.leaving-application')
-                @endif
+                @php
+                    $viewName = "application-manager::applications.components.create.$type";
+                    $viewName = str_replace('_','-',$viewName)
+                @endphp
+
+                @include($viewName)
                 <div class="d-flex justify-content-center mt-5">
                     <button class="btn btn-primary" type="submit">Gửi</button>
                 </div>

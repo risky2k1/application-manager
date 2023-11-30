@@ -16,8 +16,7 @@ class ValidateApplicationTypeMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $types = ApplicationCategory::pluck('name')->toArray();
-
+        $types = ApplicationCategory::pluck('key')->toArray();
         if (!in_array($request->route('type'), $types)) {
             abort(404);
         }

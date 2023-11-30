@@ -15,7 +15,8 @@ return new class extends Migration {
         Schema::create('application_categories', function (Blueprint $table) {
             $table->id();
 
-            $table->string('name')->unique();
+            $table->string('key')->unique();
+            $table->string('name');
             $table->foreignId('parent_id')->nullable()->constrained('application_categories');
 
             $table->timestamps();
@@ -25,13 +26,14 @@ return new class extends Migration {
         });
 
         $types = [
-            'request_application',
-            'leaving_application',
+            'request_application'=>'Đơn đề nghị',
+            'leaving_application'=>'Đơn xin nghỉ',
         ];
 
-        foreach ($types as $type) {
+        foreach ($types as $type=>$translate) {
             ApplicationCategory::create([
-                'name' => $type,
+                'key' => $type,
+                'name' => $translate,
             ]);
         }
     }

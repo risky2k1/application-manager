@@ -85,10 +85,17 @@ class Application extends Model
         return Attribute::make(
             get: function () {
                 return $this->dayOffs->sum(function ($dayOff) {
-                    $start = new \DateTime($dayOff->start_time);
-                    $end = new \DateTime($dayOff->end_time);
+                    $start = Carbon::parse($dayOff->start_time);
+                    $end = Carbon::parse($dayOff->end_time);
 
-                    return $start->diff($end)->days + 1;
+                    $startShift = $dayOff->start_shift;
+                    $endShift = $dayOff->end_shift;
+
+                    if ($start->isSameDay($end) && $startShift == $endShift) {
+                        return $start->diffInDays($end) + 0.5;
+                    } else {
+                        return $start->diffInDays($end) + 1;
+                    }
                 });
             }
         );

@@ -21,9 +21,15 @@ class ApplicationCategory extends Model
     protected $table = 'application_categories';
 
     protected $fillable = [
+        'key',
         'name',
         'parent_id',
     ];
+
+    public function applications(): HasMany
+    {
+        return $this->hasMany(Application::class, 'category_id');
+    }
 
     public function children(): HasMany
     {

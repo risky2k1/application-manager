@@ -40,8 +40,8 @@ class ApplicationController extends Controller
             }
         }
 
-        $applications = $query->whereHas('category', function ($categoryQuery) use ($type) {
-            $categoryQuery->where('name', $type);
+        $applications = $query->whereHas('category',function ($categoryQuery) use ($type){
+            $categoryQuery->where('key',$type);
         })->latest()->paginate()->withQueryString();
 
         $categories = ApplicationCategory::whereNull('parent_id')->get();
@@ -49,11 +49,12 @@ class ApplicationController extends Controller
         return view('application-manager::applications.index', compact('applications', 'categories'));
     }
 
-    public function create()
+    public function create(Request $request)
     {
         $users = User::where('is_active', true)->get();
+        $type = $request->route('type');
 
-        return view('application-manager::applications.create', compact('users'));
+        return view('application-manager::applications.create', compact('users', 'type'));
     }
 
     public function store(Request $request)
@@ -84,7 +85,7 @@ class ApplicationController extends Controller
             'proponent_id' => $request->input('proponent_id'),
             'state' => Pending::class,
             'company_id' => session('company_id'),
-            'category_id' => ApplicationCategory::where('name', $request->route('type'))->first()->id,
+            'category_id' => ApplicationCategory::where('key', $request->route('type'))->first()->id,
             'name' => $request->input('name'),
             'money_amount' => $request->input('money_amount'),
             'bank_account' => $request->input('bank_account'),
@@ -142,8 +143,8 @@ class ApplicationController extends Controller
     {
         $users = User::where('is_active', true)->get();
 
-        $type = $application->category->name;
-        return view('application-manager::applications.edit', compact('application', 'type', 'users', 'requestApplicationReasons', 'leavingApplicationReasons'));
+        $type = $application->category->key;
+        return view('application-manager::applications.edit', compact('application', 'type', 'users'));
     }
 
     public function update(Request $request, Application $application)
@@ -224,12 +225,12 @@ class ApplicationController extends Controller
         }
         toastr()->success('Cập nhật đơn từ thành công');
 
-        return redirect()->route('applications.index', ['type' => $application->category->name]);
+        return redirect()->route('applications.index', ['type' => $application->category->key]);
     }
 
     public function destroy(Application $application)
     {
-        $type = $application->category->name;
+        $type = $application->category->key;
         $application->deleteOrFail();
         toastr()->success('Xoá đơn từ thành công');
         return redirect()->route('applications.index', ['type' => $type]);
@@ -252,7 +253,7 @@ class ApplicationController extends Controller
                 toastr()->error($exception->getMessage());
             }
         }
-        return redirect()->route('applications.index', ['type' => $application->category->name]);
+        return redirect()->route('applications.index', ['type' => $application->category->key]);
     }
 
     public function export(Request $request, string $type)
@@ -300,6 +301,13 @@ class ApplicationController extends Controller
     {
         $application->restore();
         toastr()->success('Khôi phục thành công');
-        return redirect()->route('applications.index', ['type' => $application->category->type]);
+        return redirect()->route('applications.index', ['type' => $application->category->key]);
     }
+
+    public function category()
+    {
+        $categories = ApplicationCategory::paginate();
+        return view('application-manager::applications.category',compact('categories'));
+    }
+
 }
