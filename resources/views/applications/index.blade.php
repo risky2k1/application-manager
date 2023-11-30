@@ -18,7 +18,7 @@
 @section('content')
     <div class="card">
         <div class="card-header">
-            <div class="card-title">
+            <div class="card-title text-uppercase">
                 <h2>Quản lí đơn từ</h2>
             </div>
         </div>

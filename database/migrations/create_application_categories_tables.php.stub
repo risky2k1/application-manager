@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Risky2k1\ApplicationManager\Models\Application;
 use Risky2k1\ApplicationManager\Models\ApplicationCategory;
 
 return new class extends Migration {
@@ -20,45 +21,33 @@ return new class extends Migration {
             $table->timestamps();
         });
         Schema::table('applications', function (Blueprint $table) {
+            $table->foreignId('category_id')->nullable()->after('type');
             $table->softDeletes();
         });
 
         $types = [
-            'request_application' => [
-                'asset_transfer', // Bàn giao tài sản
-                'payment', // Thanh toán
-                'purchase', // Mua hàng
-                'advance', //Tạm ứng
-            ],
-            'leave_application' => [
-                'sick_leave',   //nghỉ ốm
-                'maternity_leave', //Nghỉ thai sản
-                'unpaid_leave', //Nghỉ không lương
-                'annual_leave', //Nghỉ phép năm
-                'other_leave', //Nghỉ khác
-                'child_sick_leave', //Nghỉ con ốm
-                'recovery_leave_after_illness', //nghỉ dưỡng sức sau ốm đau
-                'conference_and_training_leave',   //nghỉ hội nghị, học tập
-                'recovery_leave_after_maternity', // nghỉ dưỡng sức sau thai sản
-                'recovery_leave_after_treatment_or_injury', //nghỉ dưỡng sức sau điều trị thương tật, tai nạn
-                'compensatory_leave', //nghỉ bù
-                'accident_leave', //nghỉ tai nạn
-                'bereavement_leave', //nghỉ hiếu hỷ
-                'customer_meeting', //gặp khách hàng
-            ],
+            'request_application',
+            'leave_application',
         ];
 
-        foreach ($types as $type=>$reason){
-            $category = ApplicationCategory::create([
+        foreach ($types as $type) {
+            ApplicationCategory::create([
                 'name' => $type,
             ]);
-            foreach ($reason as $item){
-                ApplicationCategory::create([
-                    'name'=>$item,
-                    'parent_id' => $category->id,
-                ]);
-            }
         }
+        $applications = Application::whereNotNull('type')->get();
+
+        foreach ($applications as $application) {
+            $category = ApplicationCategory::where('name', $application->type)->first();
+            $application->update([
+                'category_id' => $category->id,
+            ]);
+        }
+
+        Schema::table('applications', function (Blueprint $table) {
+            $table->foreignId('category_id')->constrained('application_categories');
+            $table->dropColumn('type');
+        });
     }
 
     /**
@@ -67,8 +56,24 @@ return new class extends Migration {
     public function down(): void
     {
         Schema::table('applications', function (Blueprint $table) {
+            $table->string('type')->after('category_id');
+        });
+
+        $applications = Application::whereNotNull('category_id')->get();
+
+        foreach ($applications as $application) {
+            $category = ApplicationCategory::findOrFail($application->category_id);
+            $application->update([
+                'type' => $category->name,
+            ]);
+        }
+
+        Schema::table('applications', function (Blueprint $table) {
+            $table->dropForeign(['category_id']);
+            $table->dropColumn('category_id');
             $table->dropSoftDeletes();
         });
+        
         Schema::dropIfExists('application_categories');
     }
 };
