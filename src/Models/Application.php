@@ -42,7 +42,8 @@ class Application extends Model
         'delivery_time',
         'delivery_date',
         'attached_files',
-        'company_id'
+        'company_id',
+        'category_id',
     ];
     protected $casts = [
         'state' => ApplicationState::class,

@@ -21,7 +21,6 @@ return new class extends Migration {
             $table->timestamps();
         });
         Schema::table('applications', function (Blueprint $table) {
-            $table->foreignId('category_id')->nullable()->after('type');
             $table->softDeletes();
         });
 
@@ -35,20 +34,6 @@ return new class extends Migration {
                 'name' => $type,
             ]);
         }
-        $applications = Application::whereNotNull('type')->get();
-
-        foreach ($applications as $application) {
-            $category = ApplicationCategory::where('name', $application->type)->first();
-            $application->update([
-                'category_id' => $category->id,
-            ]);
-        }
-
-        Schema::table('applications', function (Blueprint $table) {
-            $table->foreignId('category_id')->change()->constrained('application_categories');
-            $table->text('reason')->change();
-            $table->dropColumn('type');
-        });
     }
 
     /**
@@ -57,25 +42,9 @@ return new class extends Migration {
     public function down(): void
     {
         Schema::table('applications', function (Blueprint $table) {
-            $table->string('type')->after('category_id');
-        });
-
-        $applications = Application::whereNotNull('category_id')->get();
-
-        foreach ($applications as $application) {
-            $category = ApplicationCategory::findOrFail($application->category_id);
-            $application->update([
-                'type' => $category->name,
-            ]);
-        }
-
-        Schema::table('applications', function (Blueprint $table) {
-            $table->dropForeign(['category_id']);
-            $table->dropColumn('category_id');
-            $table->string('reason');
             $table->dropSoftDeletes();
         });
-        
+
         Schema::dropIfExists('application_categories');
     }
 };
