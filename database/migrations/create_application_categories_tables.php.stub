@@ -45,7 +45,8 @@ return new class extends Migration {
         }
 
         Schema::table('applications', function (Blueprint $table) {
-            $table->foreignId('category_id')->constrained('application_categories');
+            $table->foreignId('category_id')->change()->constrained('application_categories');
+            $table->text('reason')->change();
             $table->dropColumn('type');
         });
     }
@@ -71,6 +72,7 @@ return new class extends Migration {
         Schema::table('applications', function (Blueprint $table) {
             $table->dropForeign(['category_id']);
             $table->dropColumn('category_id');
+            $table->string('reason');
             $table->dropSoftDeletes();
         });
         
