@@ -12,11 +12,12 @@
             <form action="{{route('applications.update',$application)}}" method="post" enctype="multipart/form-data">
                 @csrf
                 @method('PATCH')
-                @if($application->category->name == config('application-manager.application.default') )
-                    @include('application-manager::applications.components.edit.request-application')
-                @else
-                    @include('application-manager::applications.components.edit.leaving-application')
-                @endif
+                @php
+                    $viewName = "application-manager::applications.components.edit.".$application->category->key;
+                    $viewName = str_replace('_','-',$viewName)
+                @endphp
+
+                @include($viewName)
                 <div class="d-flex justify-content-center mt-5">
                     <button class="btn btn-primary" type="submit">Lưu</button>
                 </div>

@@ -80,7 +80,7 @@
                         <div class="col-md-6 row">
                             <div class="col-4 fw-bold">Lý do:
                             </div>
-                            <div class="col-8">{{trans('application-manager::vi.'.$application->reason)}}</div>
+                            <div class="col-8">{{$application->reason}}</div>
                         </div>
                         <div class="col-md-6 row">
                             <div class="col-4 fw-bold">Ngày tạo:
@@ -104,9 +104,9 @@
                     @endif
                     <div class="row mb-5">
                         <div class="col-md-6 row">
-                            <div class="col-4 fw-bold">Loại đơn từ:
+                            <div class="col-4 fw-bold">Lý do:
                             </div>
-                            <div class="col-8">{{trans('application-manager::vi.'.$application->type)}}</div>
+                            <div class="col-8">{{$application->category->name}}</div>
                         </div>
                     </div>
                     <div class="separator mb-5"></div>
