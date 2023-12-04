@@ -37,6 +37,7 @@ Route::get('/{application}/restore', [ApplicationController::class, 'restore'])-
 Route::prefix('ajax')->group(function () {
     Route::delete('/selected-applications', [AjaxApplicationController::class, 'deleteApplications'])->name('applications.destroy.selected');
     Route::get('/restore-applications', [AjaxApplicationController::class, 'restoreApplications'])->name('applications.restore.selected');
+    Route::post('/upload-attached-files', [AjaxApplicationController::class, 'uploadAttachedFiles'])->name('applications.upload.attached.files');
 
     Route::post('/create-category', [AjaxApplicationCategoryController::class, 'store'])->name('ajax.applications.category.store');
     Route::patch('/update-category', [AjaxApplicationCategoryController::class, 'update'])->name('ajax.applications.category.update');

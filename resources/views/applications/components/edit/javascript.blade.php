@@ -42,23 +42,78 @@
 
         hide: function (deleteElement) {
             $(this).slideUp(deleteElement);
-            // const table = $(this).closest('table').data('table');
-            {{--if (id) {--}}
-            {{--    $.ajax({--}}
-            {{--        url: "{{route('ajax.profiles.table.destroy', $profile)}}",--}}
-            {{--        method: "delete",--}}
-            {{--        headers: {--}}
-            {{--            'X-CSRF-TOKEN': csrfToken--}}
-            {{--        },--}}
-            {{--        data: {'id': id, 'table': table},--}}
-            {{--        success: function (response) {--}}
-
-            {{--        },--}}
-            {{--        error: function (request, error) {--}}
-            {{--            alert(" Can't do because: " + error);--}}
-            {{--        },--}}
-            {{--    })--}}
-            {{--}--}}
         }
     });
+
+    const id = "#drop_zone_attached_files";
+    const dropzone = document.querySelector(id);
+    const attachedFiles = {!! json_encode($attachedFiles) !!};
+    // set the preview element template
+    let previewNode = dropzone.querySelector(".dropzone-item");
+    previewNode.id = "";
+    let previewTemplate = previewNode.parentNode.innerHTML;
+    previewNode.parentNode.removeChild(previewNode);
+
+    let myDropzone = new Dropzone(id, {
+        url: "{{route('applications.upload.attached.files')}}",
+        parallelUploads: 20,
+        method: 'POST',
+        uploadMultiple: true,
+        maxFilesize: 5,
+        paramName: 'attached_files',
+        previewTemplate: previewTemplate,
+        previewsContainer: id + " .dropzone-items",
+        clickable: id + " .dropzone-select",
+        headers: {
+            'X-CSRF-TOKEN': csrfToken,
+        },
+        success: function (file, response) {
+            var uploadedFilesInfo = [];
+
+            $.each(response, function (index, value) {
+                uploadedFilesInfo.push({
+                    'file_path': value.attached_files,
+                    'original_file_name': value.original_file_name
+                });
+            })
+            $('#inputFileList').val(JSON.stringify(uploadedFilesInfo));
+        },
+    });
+
+    myDropzone.on("addedfile", function (file) {
+        // Hookup the start button
+        const dropzoneItems = dropzone.querySelectorAll('.dropzone-item');
+        dropzoneItems.forEach(dropzoneItem => {
+            dropzoneItem.style.display = '';
+        });
+    });
+
+    // Update the total progress bar
+    myDropzone.on("totaluploadprogress", function (progress) {
+        const progressBars = dropzone.querySelectorAll('.progress-bar');
+        progressBars.forEach(progressBar => {
+            progressBar.style.width = progress + "%";
+        });
+    });
+
+    myDropzone.on("sending", function (file) {
+        // Show the total progress bar when upload starts
+        const progressBars = dropzone.querySelectorAll('.progress-bar');
+        progressBars.forEach(progressBar => {
+            progressBar.style.opacity = "1";
+        });
+    });
+
+    // Hide the total progress bar when nothing"s uploading anymore
+    myDropzone.on("complete", function (progress) {
+        const progressBars = dropzone.querySelectorAll('.dz-complete');
+
+        setTimeout(function () {
+            progressBars.forEach(progressBar => {
+                progressBar.querySelector('.progress-bar').style.opacity = "0";
+                progressBar.querySelector('.progress').style.opacity = "0";
+            });
+        }, 300);
+    });
+
 </script>

@@ -30,4 +30,23 @@ class AjaxApplicationController extends Controller
             'success' => 'Khôi phục thành công',
         ]);
     }
+
+    public function uploadAttachedFiles(Request $request)
+    {
+        $path = storage_path('app/tmp/attached-files');
+        if (!file_exists($path)) {
+            mkdir($path, 0777, true);
+        }
+        $uploadedFiles = [];
+        foreach ($request->attached_files as $key => $file) {
+            $attachedFile = Storage::putFileAs('tmp/attached-files', $file, $file->getClientOriginalName());
+
+            $uploadedFiles[] = [
+                'original_file_name' => $file->getClientOriginalName(),
+                'attached_files' => $attachedFile,
+            ];
+        }
+        return response()->json($uploadedFiles);
+    }
+
 }

@@ -40,8 +40,8 @@ class ApplicationController extends Controller
             }
         }
 
-        $applications = $query->whereHas('category',function ($categoryQuery) use ($type){
-            $categoryQuery->where('key',$type);
+        $applications = $query->whereHas('category', function ($categoryQuery) use ($type) {
+            $categoryQuery->where('key', $type);
         })->latest()->paginate()->withQueryString();
 
         $categories = ApplicationCategory::whereNull('parent_id')->get();
@@ -66,8 +66,7 @@ class ApplicationController extends Controller
             'row_repeater.*' => ['array', 'nullable'],
             'description' => ['string', 'nullable'],
             'reviewer_id' => ['required', 'string'],
-            'attached_files' => ['array', 'nullable'],
-            'attached_files.*' => ['nullable', 'mimes:doc,docx,xls,xlsx,pdf,ppt,pptx,jpeg,png,gif', 'max:5120'],
+            'attached_files' => ['json', 'nullable'],
             'name' => ['string', 'nullable', Rule::requiredIf($request->route('type') == config('application-manager.application.default'))],
             'money_amount' => ['numeric', 'min:0', 'nullable'],
             'bank_account' => ['string', 'nullable'],
@@ -93,18 +92,27 @@ class ApplicationController extends Controller
             'delivery_date' => carbon($request->input('delivery_date')),
         ]);
 
-        if ($request->hasFile('attached_files')) {
-            $attachedFiles = [];
+        if ($request->has('attached_files')) {
+            $attachedFiles = json_decode($request->input('attached_files'), true);
+            $filePaths = [];
 
-            foreach ($request->attached_files as $file) {
-                $attachedFile = Storage::disk('public')->putFileAs('application_attached_files/'.$application->user_id.'/'.$application->id, $file, $file->getClientOriginalName());
-                $attachedFiles[] = $attachedFile;
+            $destinationStoragePath = storage_path('public/application_attached_files'.'/user_'.$application->user_id.'/application_'.$application->id);
+            $destinationPath = 'application_attached_files'.'/user_'.$application->user_id.'/application_'.$application->id;
+
+            if (!file_exists($destinationStoragePath)) {
+                mkdir($destinationStoragePath, 0777, true);
+            }
+
+            foreach ($attachedFiles as $file) {
+                $movedFilePath = Storage::move(
+                    $file['file_path'],
+                    'public/'.$destinationPath.'/'.$file['original_file_name']);
+                $filePaths[] = $destinationPath.'/'.$file['original_file_name'];
             }
             $application->update([
-                'attached_files' => $attachedFiles,
+                'attached_files' => $filePaths,
             ]);
         }
-
         if ($request->has('row_repeater')) {
             foreach ($request->input('row_repeater') as $dayOff) {
                 $validator = Validator::make($dayOff, [
@@ -144,7 +152,9 @@ class ApplicationController extends Controller
         $users = User::where('is_active', true)->get();
 
         $type = $application->category->key;
-        return view('application-manager::applications.edit', compact('application', 'type', 'users'));
+
+        $attachedFiles = $application->attached_files;
+        return view('application-manager::applications.edit', compact('application', 'type', 'users', 'attachedFiles'));
     }
 
     public function update(Request $request, Application $application)
@@ -156,9 +166,7 @@ class ApplicationController extends Controller
             'row_repeater.*' => ['array', 'nullable'],
             'description' => ['string', 'nullable'],
             'reviewer_id' => ['required', 'string'],
-            'attached_files' => ['array', 'nullable'],
-            'attached_files.*' => ['nullable', 'mimes:doc,docx,xls,pdf,xlsx,ppt,pptx,jpeg,png,gif', 'max:5120'],
-
+            'attached_files' => ['json', 'nullable'],
             'name' => ['string', 'nullable', Rule::requiredIf($request->route('type') == config('application-manager.application.default'))],
             'money_amount' => ['numeric', 'min:0', 'nullable'],
             'bank_account' => ['string', 'nullable'],
@@ -180,15 +188,31 @@ class ApplicationController extends Controller
             'delivery_date' => carbon($request->input('delivery_date')),
         ]);
 
-        if ($request->hasFile('attached_files')) {
-            $attachedFiles = [];
+        if (!empty($request->attached_files)) {
+            $attachedFiles = json_decode($request->input('attached_files'), true);
+            $filePaths = [];
 
-            foreach ($request->attached_files as $file) {
-                $attachedFile = Storage::disk('public')->putFileAs('application_attached_files/'.$application->user_id.'/'.$application->id, $file, $file->getClientOriginalName());
-                $attachedFiles[] = $attachedFile;
+            $destinationStoragePath = storage_path('public/application_attached_files'.'/user_'.$application->user_id.'/application_'.$application->id);
+            $destinationPath = 'application_attached_files'.'/user_'.$application->user_id.'/application_'.$application->id;
+
+            if (!empty($application->attached_files)) {
+                foreach ($application->attached_files as $attachedFile) {
+                    Storage::delete('public'.'/'.$attachedFile);
+                }
+            }
+
+            if (!file_exists($destinationStoragePath)) {
+                mkdir($destinationStoragePath, 0777, true);
+            }
+
+            foreach ($attachedFiles as $file) {
+                $movedFilePath = Storage::move(
+                    $file['file_path'],
+                    'public/'.$destinationPath.'/'.$file['original_file_name']);
+                $filePaths[] = $destinationPath.'/'.$file['original_file_name'];
             }
             $application->update([
-                'attached_files' => $attachedFiles,
+                'attached_files' => $filePaths,
             ]);
         }
 
@@ -279,10 +303,11 @@ class ApplicationController extends Controller
     public function downloadAttachedFiles(Application $application)
     {
         $zipFileName = 'Tệp đính kèm của đơn từ '.$application->code.'.zip';
-        $zipFilePath = storage_path("app/public/application_attached_files/".$application->user->id."/".$application->id."/".$zipFileName);
+        $zipFilePath = storage_path("app/public/application_attached_files/user_".$application->user->id."/application_".$application->id."/".$zipFileName);
         $zip = new \ZipArchive();
         if ($zip->open($zipFilePath, ZipArchive::CREATE) === true) {
-            $folderPath = "public/application_attached_files/{$application->user->id}/{$application->id}";
+            $folderPath = "public/application_attached_files/user_{$application->user->id}/application_{$application->id}";
+
             if (Storage::exists($folderPath)) {
                 $files = Storage::files($folderPath);
             }
@@ -307,7 +332,7 @@ class ApplicationController extends Controller
     public function category()
     {
         $categories = ApplicationCategory::paginate();
-        return view('application-manager::applications.category',compact('categories'));
+        return view('application-manager::applications.category', compact('categories'));
     }
 
 }
