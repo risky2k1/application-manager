@@ -64,7 +64,8 @@
                                     data-placeholder="Ca bắt đầu"
                                     data-allow-clear="true"
                                     data-hide-search="true"
-                                    name="start_shift">
+                                    name="start_shift"
+                                    required>
                                 <option value="">-- --</option>
                                 @foreach(config('application-manager.application.shift') as $shift)
                                     <option value="{{$shift}}" @selected($dayOff->start_shift == $shift)>{{trans('application-manager::vi.'.$shift)}}</option>
@@ -78,6 +79,7 @@
                                    value="{{$dayOff->start_time}}"
                                    placeholder="Thời gian bắt đầu"
                                    autocomplete="off"
+                                   required
                             />
                         </td>
                         <td>
@@ -87,6 +89,7 @@
                                     data-allow-clear="true"
                                     data-hide-search="true"
                                     name="end_shift"
+                                    required
                             >
                                 <option value="">-- --</option>
                                 @foreach(config('application-manager.application.shift') as $shift)
@@ -101,6 +104,7 @@
                                    value="{{$dayOff->end_time}}"
                                    placeholder="Thời gian kết thúc"
                                    autocomplete="off"
+                                   required
                             />
                         </td>
                         <td class="col-1">
@@ -109,6 +113,58 @@
                         <input type="hidden" name="id" value="{{$dayOff->id}}">
                     </tr>
                 @endforeach
+                <tr data-repeater-item>
+                    <td>
+                        <select class="form-select @error('start_shift') is-invalid @enderror"
+                                data-control="select2"
+                                data-placeholder="Ca bắt đầu"
+                                data-allow-clear="true"
+                                data-hide-search="true"
+                                name="start_shift"
+                                required>
+                            <option value="">-- --</option>
+                            @foreach(config('application-manager.application.shift') as $shift)
+                                <option value="{{$shift}}">{{trans('application-manager::vi.'.$shift)}}</option>
+                            @endforeach
+                        </select>
+                    </td>
+                    <td>
+                        <input type="text"
+                               class="form-control mb-3 mb-lg-0 @error('start_date') is-invalid @enderror edit-ajax date-picker"
+                               name="start_date"
+                               placeholder="Thời gian bắt đầu"
+                               autocomplete="off"
+                               required
+                        />
+                    </td>
+                    <td>
+                        <select class="form-select @error('end_shift') is-invalid @enderror"
+                                data-control="select2"
+                                data-placeholder="Ca kết thúc"
+                                data-allow-clear="true"
+                                data-hide-search="true"
+                                name="end_shift"
+                                required
+                        >
+                            <option value="">-- --</option>
+                            @foreach(config('application-manager.application.shift') as $shift)
+                                <option value="{{$shift}}">{{trans('application-manager::vi.'.$shift)}}</option>
+                            @endforeach
+                        </select>
+                    </td>
+                    <td>
+                        <input type="text"
+                               class="form-control mb-3 mb-lg-0 @error('end_date') is-invalid @enderror edit-ajax date-picker"
+                               name="end_date"
+                               placeholder="Thời gian kết thúc"
+                               autocomplete="off"
+                               required
+                        />
+                    </td>
+                    <td class="col-1">
+                        <div data-repeater-delete class="delete"><i class="fa-solid fa-trash"></i></div>
+                    </td>
+                </tr>
                 </tbody>
                 <!--end::Table body-->
             </table>

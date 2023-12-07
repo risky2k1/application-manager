@@ -11,7 +11,7 @@
     <div class="col-sm-6">
         <!--begin::Input group-->
         <!--begin::Label-->
-        <label class="fw-semibold fs-6 mb-2" for="is_paid_leave">Tính công</label>
+        <label class="fw-semibold fs-6 mb-2 required" for="is_paid_leave">Tính công</label>
         <!--end::Label-->
         <!--begin::Input-->
         <select class="form-select @error('is_paid_leave') is-invalid @enderror"
@@ -20,7 +20,8 @@
                 data-allow-clear="true"
                 data-hide-search="true"
                 name="is_paid_leave"
-                id="is_paid_leave">
+                id="is_paid_leave"
+                required>
             <option value="">-- --</option>
             <option value="1" @selected(old('is_paid_leave' ) == '1')>Có</option>
             <option value="0" @selected(old('is_paid_leave' ) == '0')>Không</option>
@@ -35,7 +36,7 @@
         <div class="row mt-5">
             <div class="d-flex">
                 <div class="col">
-                    <h5>Thời gian nghỉ</h5>
+                    <label class="fw-semibold fs-6 mb-2 required" for="">Thời gian nghỉ</label>
                 </div>
                 <div class="col-auto d-flex">
                     <button type="button" data-repeater-create class="justify-content-center border border-1" style="background-color: #F15A22">
@@ -65,7 +66,8 @@
                                         data-placeholder="Ca bắt đầu"
                                         data-allow-clear="true"
                                         data-hide-search="true"
-                                        name="start_shift">
+                                        name="start_shift"
+                                        required>
                                     <option value="">-- --</option>
                                     @foreach(config('application-manager.application.shift') as $shift)
                                         <option value="{{$shift}}" @selected($row['start_shift'] == $shift)>{{trans('application-manager::vi.'.$shift)}}</option>
@@ -78,7 +80,8 @@
                                        name="start_date"
                                        placeholder="Thời gian bắt đầu"
                                        autocomplete="off"
-                                       value="{{$row['start_date']}}"
+                                       value="{{carbon($row['start_date'],'m-d-Y','d-m-Y')}}"
+                                       required
                                 />
                             </td>
                             <td>
@@ -88,6 +91,7 @@
                                         data-allow-clear="true"
                                         data-hide-search="true"
                                         name="end_shift"
+                                        required
                                 >
                                     <option value="">-- --</option>
                                     @foreach(config('application-manager.application.shift') as $shift)
@@ -101,7 +105,8 @@
                                        name="end_date"
                                        placeholder="Thời gian kết thúc"
                                        autocomplete="off"
-                                       value="{{$row['end_date']}}"
+                                       value="{{carbon($row['end_date'],'m-d-Y','d-m-Y')}}"
+                                       required
                                 />
                             </td>
                             <td class="col-1">
@@ -117,7 +122,8 @@
                                 data-placeholder="Ca bắt đầu"
                                 data-allow-clear="true"
                                 data-hide-search="true"
-                                name="start_shift">
+                                name="start_shift"
+                                required>
                             <option value="">-- --</option>
                             @foreach(config('application-manager.application.shift') as $shift)
                                 <option value="{{$shift}}">{{trans('application-manager::vi.'.$shift)}}</option>
@@ -130,6 +136,7 @@
                                name="start_date"
                                placeholder="Thời gian bắt đầu"
                                autocomplete="off"
+                               required
                         />
                     </td>
                     <td>
@@ -139,6 +146,7 @@
                                 data-allow-clear="true"
                                 data-hide-search="true"
                                 name="end_shift"
+                                required
                         >
                             <option value="">-- --</option>
                             @foreach(config('application-manager.application.shift') as $shift)
@@ -152,6 +160,7 @@
                                name="end_date"
                                placeholder="Thời gian kết thúc"
                                autocomplete="off"
+                               required
                         />
                     </td>
                     <td class="col-1">

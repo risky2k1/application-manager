@@ -104,7 +104,7 @@
                     @endif
                     <div class="row mb-5">
                         <div class="col-md-6 row">
-                            <div class="col-4 fw-bold">Lý do:
+                            <div class="col-4 fw-bold">Loại đơn:
                             </div>
                             <div class="col-8">{{$application->category->name}}</div>
                         </div>

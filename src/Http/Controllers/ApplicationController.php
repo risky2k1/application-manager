@@ -92,7 +92,7 @@ class ApplicationController extends Controller
             'delivery_date' => carbon($request->input('delivery_date')),
         ]);
 
-        if ($request->has('attached_files')) {
+        if (!empty($request->attached_files)) {
             $attachedFiles = json_decode($request->input('attached_files'), true);
             $filePaths = [];
 
@@ -116,12 +116,17 @@ class ApplicationController extends Controller
         if ($request->has('row_repeater')) {
             foreach ($request->input('row_repeater') as $dayOff) {
                 $validator = Validator::make($dayOff, [
-                    'start_time' => ['nullable', 'date_format:d/m/Y'],
+                    'start_date' => ['nullable', 'date_format:d/m/Y'],
                     'start_shift' => ['nullable', 'string', 'max:255'],
-                    'end_time' => ['nullable', 'date_format:d/m/Y', 'after_or_equal:start_time'],
+                    'end_date' => ['nullable', 'date_format:d/m/Y', 'after_or_equal:start_date'],
                     'end_shift' => ['nullable', 'string', 'max:255'],
+                ], [
+
+                ], [
+                    'end_date' => 'ngày kết thúc',
+                    'start_date' => 'ngày bắt đầu',
                 ]);
-                $validator->sometimes('end_time', 'after_or_equal:start_time', function (Fluent $input) {
+                $validator->sometimes('end_date', 'after_or_equal:start_date', function ($input) {
                     return !empty($input->start_time);
                 });
 
@@ -219,12 +224,18 @@ class ApplicationController extends Controller
         if ($request->has('row_repeater')) {
             foreach ($request->input('row_repeater') as $dayOff) {
                 $validator = Validator::make($dayOff, [
-                    'start_time' => ['nullable', 'date_format:d/m/Y'],
+                    'start_date' => ['nullable', 'date_format:d/m/Y'],
                     'start_shift' => ['nullable', 'string', 'max:255'],
-                    'end_time' => ['nullable', 'date_format:d/m/Y', 'after_or_equal:start_time'],
+                    'end_date' => ['nullable', 'date_format:d/m/Y', 'after_or_equal:start_date'],
                     'end_shift' => ['nullable', 'string', 'max:255'],
+                ], [
+
+                ], [
+                    'end_date' => 'ngày kết thúc',
+                    'start_date' => 'ngày bắt đầu',
                 ]);
-                $validator->sometimes('end_time', 'after_or_equal:start_time', function (Fluent $input) {
+
+                $validator->sometimes('end_date', 'after_or_equal:start_date', function ($input) {
                     return !empty($input->start_time);
                 });
 

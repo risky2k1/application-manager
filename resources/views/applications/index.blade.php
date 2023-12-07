@@ -44,12 +44,14 @@
                         </li>
                         <!--end::Nav item-->
                     @endforeach
+                    @role('super_admin')
                     <li class="nav-item" style="margin-left: auto">
                         <a href="{{route('applications.category.index')}}" class="btn btn-sm btn-success">
                             Thiết lập
                             <i class="fa-solid fa-gear mb-1"></i>
                         </a>
                     </li>
+                    @endrole
                 </ul>
 
             </div>

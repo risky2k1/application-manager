@@ -65,6 +65,10 @@
         previewTemplate: previewTemplate,
         previewsContainer: id + " .dropzone-items",
         clickable: id + " .dropzone-select",
+        maxFiles: 5,
+        acceptedFiles: "application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.ms-excel," +
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/pdf," +
+            "application/vnd.ms-powerpoint,application/vnd.openxmlformats-officedocument.presentationml.presentation,image/jpeg,image/png,image/gif",
         headers: {
             'X-CSRF-TOKEN': csrfToken,
         },

@@ -4,7 +4,6 @@ namespace Risky2k1\ApplicationManager\Models;
 
 use App\Models\User;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Risky2k1\ApplicationManager\Models\ApplicationCategory;
 use Risky2k1\ApplicationManager\Models\States\Application\ApplicationState;
 use Risky2k1\ApplicationManager\Models\States\Application\Pending;
 use Carbon\Carbon;
@@ -31,10 +30,6 @@ class Application extends Model
         'state',
         'type',
         'reason',
-        'start_time',
-        'start_shift',
-        'end_time',
-        'end_shift',
         'is_paid_leave',
         'description',
         'money_amount',
