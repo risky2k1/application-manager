@@ -69,8 +69,10 @@
             } else {
                 if (selectedApplicationIds.length > 0) {
                     $('#restore_selected_applications').show();
+                    $('#force_delete_selected_applications').show();
                 } else {
                     $('#restore_selected_applications').hide();
+                    $('#force_delete_selected_applications').hide();
                 }
             }
 
@@ -159,6 +161,49 @@
 
             }
         });
+
+        $('#force_delete_selected_applications').on('click', function () {
+            updateSelectedIds();
+
+            if (selectedApplicationIds.length > 0) {
+
+                Swal.fire({
+                    title: 'Xác nhận xoá',
+                    text: 'Bạn có chắc chắn muốn xoá vĩnh viễn các đơn đã chọn?',
+                    icon: 'warning',
+                    buttonsStyling: false,
+                    showCancelButton: true,
+                    confirmButtonText: 'Đồng ý',
+                    cancelButtonText: 'Hủy bỏ',
+                    customClass: {
+                        confirmButton: "btn btn-primary",
+                        cancelButton: "btn btn-danger"
+                    },
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: '{{route('applications.force.destroy.selected')}}',
+                            method: 'DELETE',
+                            data: {
+                                _token: '{{ csrf_token() }}',
+                                selected_applications_id: selectedApplicationIds,
+                            },
+                            success: function () {
+                                $.each(selectedApplicationIds, function (key, val) {
+                                    $('#application_' + val).remove();
+                                })
+                                showToast('Thành công', null, 'success');
+                            },
+                            error: function (error) {
+                                showToast('Thất bại', error, 'error');
+                            }
+                        });
+                    }
+                })
+
+            }
+        });
+
 
     })
     const updateApplicationState = (state) => {
