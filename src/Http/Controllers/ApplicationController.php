@@ -337,7 +337,7 @@ class ApplicationController extends Controller
     {
         $application->restore();
         toastr()->success('Khôi phục thành công');
-        return redirect()->route('applications.index', ['type' => $application->category->key]);
+        return redirect()->route('applications.index', ['type' => $application->category->key, 'state' => 'deleted']);
     }
 
     public function category()
