@@ -33,7 +33,7 @@
                             <div class="col-8">{{$application->user->roles->first()?->text}}</div>
                         </div>
                     </div>
-                    @if($application->type == config('application-manager.application.default'))
+                    @if($application->category->key == config('application-manager.application.default'))
                         <div class="row mb-5">
                             <div class="col-md-6 row">
                                 <div class="col-4 fw-bold">Tên đề suất:
@@ -54,7 +54,7 @@
                             </div>
                             <div class="col-md-6 row">
                                 <div class="col-4 fw-bold">Ngày cần hàng:</div>
-                                <div class="col-8">{{carbon($application->delivery_date,'Y-m-d','d-m-Y')}}</div>
+                                <div class="col-8">{{carbon($application->delivery_date,'Y-m-d','d-m-Y')}} - {{trans('application-manager::vi.'.$application->delivery_time)}}</div>
                             </div>
                         </div>
                     @endif
@@ -69,7 +69,7 @@
                                        data-url="{{route('applications.update.state',$application)}}"@endif
                                 >{{$application->state->text()}}</label></div>
                         </div>
-                        @if($application->type == config('application-manager.application.default'))
+                        @if($application->category->key == config('application-manager.application.default'))
                             <div class="col-md-6 row">
                                 <div class="col-4 fw-bold">Số tiền:</div>
                                 <div class="col-8">{{number_format($application->money_amount)}}</div>
@@ -88,7 +88,7 @@
                             <div class="col-8">{{carbon($application->created_at,'Y-m-d','d-m-Y')}}</div>
                         </div>
                     </div>
-                    @if($application->type != config('application-manager.application.default'))
+                    @if($application->category->key != config('application-manager.application.default'))
                         <div class="row mb-5">
                             <div class="col-md-6 row">
                                 <div class="col-4 fw-bold">Tổng ngày nghỉ:
