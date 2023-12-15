@@ -104,21 +104,22 @@
                 <button class="btn btn-sm btn-danger me-5" style="display: none" id="restore_selected_applications">
                     Khôi phục <span class="selected-application"></span> đơn đã chọn
                 </button>
+                @if(request('state') != 'deleted')
+                    <a href="{{route('applications.export',['type'=>request()->route('type'),'state'=>request('state')])}}" class="btn btn-sm btn-light btn-active-light-primary me-5">
+                        Xuất<i class="ms-2 fa-solid fa-file-export"></i>
+                    </a>
 
-                <a href="{{route('applications.export',['type'=>request()->route('type'),'state'=>request('state')])}}" class="btn btn-sm btn-light btn-active-light-primary me-5">
-                    Xuất<i class="ms-2 fa-solid fa-file-export"></i>
-                </a>
-
-                <a href="{{route('applications.create',['type'=>request()->route('type')])}}">
-                    <div class="d-flex justify-content-end" data-kt-customer-table-toolbar="base">
-                        <!--begin::Add customer-->
-                        <button type="button" class="btn btn-sm btn-success" data-bs-toggle="modal">
-                            Thêm
-                            <i class="fa-solid fa-plus text-white"></i>
-                        </button>
-                        <!--end::Add customer-->
-                    </div>
-                </a>
+                    <a href="{{route('applications.create',['type'=>request()->route('type')])}}">
+                        <div class="d-flex justify-content-end" data-kt-customer-table-toolbar="base">
+                            <!--begin::Add customer-->
+                            <button type="button" class="btn btn-sm btn-success" data-bs-toggle="modal">
+                                Thêm
+                                <i class="fa-solid fa-plus text-white"></i>
+                            </button>
+                            <!--end::Add customer-->
+                        </div>
+                    </a>
+                @endif
                 <!--end::Toolbar-->
             </div>
         </div>
