@@ -346,4 +346,11 @@ class ApplicationController extends Controller
         return view('application-manager::applications.category', compact('categories'));
     }
 
+    public function forceDelete(Application $application)
+    {
+        $application->forceDelete();
+        toastr()->success('Xoá vĩnh viễn thành công');
+        return redirect()->route('applications.index', ['type' => $application->category->key, 'state' => 'deleted']);
+    }
+
 }

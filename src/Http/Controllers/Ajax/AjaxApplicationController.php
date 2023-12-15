@@ -49,4 +49,14 @@ class AjaxApplicationController extends Controller
         return response()->json($uploadedFiles);
     }
 
+    public function forceDeleteApplications(Request $request)
+    {
+        $selectedApplicationIds = $request->input('selected_applications_id');
+        Application::whereIn('id', $selectedApplicationIds)->forceDelete();
+
+        return response()->json([
+            'success' => 'Xoá vĩnh viễn tất cả thành công',
+        ]);
+    }
+
 }
