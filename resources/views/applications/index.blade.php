@@ -101,9 +101,14 @@
                     Xoá <span class="selected-application"></span> đơn đã chọn
                 </button>
 
-                <button class="btn btn-sm btn-danger me-5" style="display: none" id="restore_selected_applications">
+                <button class="btn btn-sm btn-danger me-5" style="display: none" id="force_delete_selected_applications">
+                    Xoá vĩnh viễn <span class="selected-application"></span> đơn đã chọn
+                </button>
+
+                <button class="btn btn-sm btn-primary me-5" style="display: none" id="restore_selected_applications">
                     Khôi phục <span class="selected-application"></span> đơn đã chọn
                 </button>
+
                 @if(request('state') != 'deleted')
                     <a href="{{route('applications.export',['type'=>request()->route('type'),'state'=>request('state')])}}" class="btn btn-sm btn-light btn-active-light-primary me-5">
                         Xuất<i class="ms-2 fa-solid fa-file-export"></i>
@@ -207,6 +212,11 @@
                                     <td>{{carbon($application->created_at,'Y-m-d','d-m-Y')}}</td>
                                     <td class="d-flex align-items-center justify-content-end">
                                         @if($application->trashed())
+                                            <form action="{{route('applications.force.delete',$application)}}" method="POST" class="delete_form">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-sm btn-danger me-5 delete_button" data-delete="vĩnh viễn đơn từ">Xoá vĩnh viễn</button>
+                                            </form>
                                             <a href="{{route('applications.restore',$application)}}" class="btn btn-sm btn-primary">Khôi phục</a>
                                         @else
                                             @if($application->isPending)
