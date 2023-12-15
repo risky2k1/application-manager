@@ -106,6 +106,7 @@
                                 $.each(selectedApplicationIds, function (key, val) {
                                     $('#application_' + val).remove();
                                 })
+                                $('#delete_selected_applications').hide();
                                 showToast('Thành công', null, 'success');
                             },
                             error: function (error) {
